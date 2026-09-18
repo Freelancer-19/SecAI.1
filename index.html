@@ -1,0 +1,297 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>DeepScan Forensic - Multimedia Input</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&amp;family=Inter:wght@400;500&amp;family=JetBrains+Mono:wght@500;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<style>
+        body {
+            background-color: #031427;
+            color: #d3e4fe;
+            -webkit-font-smoothing: antialiased;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(144, 144, 151, 0.2);
+        }
+        .scan-line {
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #4edea3, transparent);
+            animation: scan 3s linear infinite;
+        }
+        @keyframes scan {
+            0% { top: 0; }
+            100% { top: 100%; }
+        }
+        .glow-hover:hover {
+            box-shadow: 0 0 15px rgba(78, 222, 163, 0.3);
+            border-color: #4edea3;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-low": "#0b1c30",
+                        "outline": "#909097",
+                        "on-tertiary": "#67001b",
+                        "tertiary-container": "#39000b",
+                        "inverse-primary": "#565e74",
+                        "error-container": "#93000a",
+                        "surface-container-high": "#1b2b3f",
+                        "on-secondary-fixed-variant": "#005236",
+                        "secondary": "#4edea3",
+                        "primary": "#bec6e0",
+                        "tertiary-fixed-dim": "#ffb2b7",
+                        "background": "#031427",
+                        "surface-bright": "#2a3a4f",
+                        "secondary-fixed-dim": "#4edea3",
+                        "on-primary-fixed-variant": "#3f465c",
+                        "on-tertiary-container": "#ee3a5a",
+                        "on-primary-fixed": "#131b2e",
+                        "on-surface-variant": "#c6c6cd",
+                        "surface-container-highest": "#26364a",
+                        "surface-container-lowest": "#000f21",
+                        "on-background": "#d3e4fe",
+                        "inverse-surface": "#d3e4fe",
+                        "on-error": "#690005",
+                        "on-tertiary-fixed": "#40000d",
+                        "surface-variant": "#26364a",
+                        "inverse-on-surface": "#213145",
+                        "surface-tint": "#bec6e0",
+                        "primary-container": "#0f172a",
+                        "on-tertiary-fixed-variant": "#92002a",
+                        "primary-fixed-dim": "#bec6e0",
+                        "on-secondary-fixed": "#002113",
+                        "surface": "#031427",
+                        "on-secondary": "#003824",
+                        "tertiary": "#ffb2b7",
+                        "tertiary-fixed": "#ffdadb",
+                        "primary-fixed": "#dae2fd",
+                        "secondary-fixed": "#6ffbbe",
+                        "on-surface": "#d3e4fe",
+                        "on-primary-container": "#798098",
+                        "outline-variant": "#45464d",
+                        "on-error-container": "#ffdad6",
+                        "error": "#ffb4ab",
+                        "secondary-container": "#00a572",
+                        "surface-container": "#102034",
+                        "surface-dim": "#031427",
+                        "on-primary": "#283044",
+                        "on-secondary-container": "#00311f"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "gutter": "12px",
+                        "component-padding": "16px",
+                        "margin-mobile": "16px",
+                        "margin-desktop": "32px",
+                        "base": "4px"
+                    },
+                    "fontFamily": {
+                        "label-mono": ["JetBrains Mono"],
+                        "headline-lg": ["Hanken Grotesk"],
+                        "body-lg": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "headline-md": ["Hanken Grotesk"]
+                    },
+                    "fontSize": {
+                        "label-mono": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="min-h-screen flex flex-col font-body-lg">
+<!-- TopAppBar -->
+<header class="fixed top-0 z-[100] flex justify-between items-center w-full px-margin-mobile h-16 bg-surface-dim border-b border-outline-variant"><div class="flex items-center gap-3"><span class="material-symbols-outlined text-secondary text-2xl">shield</span><span class="text-headline-md font-headline-md font-bold tracking-tight text-on-background">SECAI</span></div><div class="flex items-center gap-3"><div class="flex items-center gap-1.5 px-2.5 py-1 bg-secondary-container/20 border border-secondary/30 rounded-full text-secondary font-label-mono text-[10px] tracking-wider uppercase"><span class="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse"></span>LIVE_FEED</div><div class="flex items-center gap-2 px-3 py-1 rounded-full bg-surface-container-highest border border-outline-variant"><span class="material-symbols-outlined text-primary text-sm">person</span><span class="font-label-mono text-label-mono text-on-surface font-medium">Yash</span></div></div></header>
+<!-- Main Content -->
+<main class="flex-grow pt-24 pb-32 px-margin-mobile max-w-5xl mx-auto w-full">
+<!-- Step Indicator -->
+<div class="mb-8 flex items-center gap-3"><div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary-container/20 border border-secondary/30 text-secondary font-label-mono text-label-mono"><span class="material-symbols-outlined text-sm">fingerprint</span><span class="">STEP 01 OF 04</span><span class="text-outline">•</span><span class="tracking-wider uppercase text-[10px] text-on-surface-variant font-medium">INPUT IDENTIFICATION &amp; VALIDATION</span></div><div class="h-px flex-grow bg-outline-variant/60"></div></div>
+<!-- Headline -->
+<section class="mb-10">
+<h2 class="text-headline-lg font-headline-lg text-on-background mb-2">Multimedia Input</h2>
+<p class="text-on-surface-variant max-w-2xl">Initialize forensic analysis by selecting the source media type. Our engine supports high-fidelity processing for visual, temporal, and auditory artifacts.</p>
+</section>
+<!-- Input Grid (Bento Style) -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-16">
+<!-- Image Only -->
+<button class="group relative flex flex-col items-start p-6 rounded-xl glass-panel glow-hover transition-all text-left overflow-hidden">
+<div class="scan-line opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<div class="mb-8 p-3 rounded-lg bg-surface-container-highest text-secondary group-hover:scale-110 transition-transform duration-300">
+<span class="material-symbols-outlined text-3xl">photo_library</span>
+</div>
+<h3 class="text-on-surface font-headline-md text-xl mb-1">Image Only</h3>
+<p class="text-on-surface-variant text-body-sm mb-4">Static frames, metadata analysis, and deepfake noise detection.</p>
+<div class="mt-auto font-label-mono text-[10px] text-outline uppercase">Module: VIS-01A</div>
+</button>
+<!-- Video (No Audio) -->
+<button class="group relative flex flex-col items-start p-6 rounded-xl glass-panel glow-hover transition-all text-left overflow-hidden">
+<div class="scan-line opacity-0 group-hover:opacity-100 transition-opacity" style="animation-delay: 0.5s"></div>
+<div class="mb-8 p-3 rounded-lg bg-surface-container-highest text-secondary group-hover:scale-110 transition-transform duration-300">
+<span class="material-symbols-outlined text-3xl">videocam_off</span>
+</div>
+<h3 class="text-on-surface font-headline-md text-xl mb-1">Video (No Audio)</h3>
+<p class="text-on-surface-variant text-body-sm mb-4">Temporal consistency check and optical flow forensic analysis.</p>
+<div class="mt-auto font-label-mono text-[10px] text-outline uppercase">Module: TMP-04B</div>
+</button>
+<!-- Video (With Audio) -->
+<button class="group relative flex flex-col items-start p-6 rounded-xl glass-panel glow-hover transition-all text-left overflow-hidden border-secondary/40 bg-secondary/5">
+<div class="scan-line opacity-0 group-hover:opacity-100 transition-opacity" style="animation-delay: 1s"></div>
+<div class="mb-8 p-3 rounded-lg bg-secondary-container text-on-secondary-container group-hover:scale-110 transition-transform duration-300">
+<span class="material-symbols-outlined text-3xl">video_call</span>
+</div>
+<h3 class="text-on-surface font-headline-md text-xl mb-1">Video (With Audio)</h3>
+<p class="text-on-surface-variant text-body-sm mb-4">Dual-stream synchronization and multi-modal integrity verification.</p>
+<div class="mt-auto font-label-mono text-[10px] text-secondary uppercase font-bold">Recommended</div>
+</button>
+<!-- Audio Only -->
+<button class="group relative flex flex-col items-start p-6 rounded-xl glass-panel glow-hover transition-all text-left overflow-hidden">
+<div class="scan-line opacity-0 group-hover:opacity-100 transition-opacity" style="animation-delay: 1.5s"></div>
+<div class="mb-8 p-3 rounded-lg bg-surface-container-highest text-secondary group-hover:scale-110 transition-transform duration-300">
+<span class="material-symbols-outlined text-3xl">mic</span>
+</div>
+<h3 class="text-on-surface font-headline-md text-xl mb-1">Audio Only</h3>
+<p class="text-on-surface-variant text-body-sm mb-4">Spectrogram analysis, voice cloning detection, and acoustic biometrics.</p>
+<div class="mt-auto font-label-mono text-[10px] text-outline uppercase">Module: AUD-09C</div>
+</button>
+</div>
+<!-- Recent Scans / Upload History -->
+<section>
+<div class="flex items-center justify-between mb-6">
+<h3 class="text-headline-md font-headline-md text-on-background">Recent Scans</h3>
+<button class="text-label-mono font-label-mono text-secondary hover:underline">VIEW ALL HISTORY</button>
+</div>
+<div class="space-y-3">
+<!-- Record 1 -->
+<div class="flex items-center p-4 glass-panel rounded-lg hover:bg-surface-container-highest transition-colors group">
+<div class="w-12 h-12 rounded bg-surface-container-highest flex items-center justify-center mr-4 border border-outline-variant overflow-hidden">
+<div class="w-full h-full bg-cover" data-alt="A macro close-up of high-tech digital artifacts on a screen, showing pixels and distortion patterns in a dark navy and emerald green color scheme. The lighting is cold and clinical, evoking a forensic laboratory atmosphere. The composition is tight and focused, emphasizing digital textures and data-driven visual cues of the DeepScan app." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDv2uXwSj8F8u1iNANWNXaFO8BxWN6bwyembIYLNwcqzcK9JtGtF6vEc3VXNJ3mbli7nZBPNZVeKKoqISgeFq4M3aUo_gq4cUjBS64BkiR5VzyDQ41VwFyCS-5Bf0NaqIke8PT20Tho-JxdgzRF8frLinjqJBEGNM-ap9-ADtujNBkZ4WGKpbNFEoqb0mSDO6pg8R1s3-qNBfzgCaG7eQONXpt_HY9GIa5-vTjtJWAf1F-Sgfx2LvZWVAi6_F2XmThvxCf-Ufh59M44')"></div>
+</div>
+<div class="flex-grow">
+<div class="flex items-center gap-2">
+<span class="text-on-surface font-medium">evidence_file_882.mp4</span>
+<span class="px-2 py-0.5 rounded text-[10px] bg-error-container text-on-error-container font-label-mono">SYNTHETIC DETECTED</span>
+</div>
+<p class="text-on-surface-variant text-body-sm">Analysis complete • 14:02 UTC • Confidence: 98.4%</p>
+</div>
+<button class="material-symbols-outlined text-outline group-hover:text-secondary transition-colors">arrow_forward_ios</button>
+</div>
+<!-- Record 2 -->
+<div class="flex items-center p-4 glass-panel rounded-lg hover:bg-surface-container-highest transition-colors group">
+<div class="w-12 h-12 rounded bg-surface-container-highest flex items-center justify-center mr-4 border border-outline-variant overflow-hidden">
+<div class="w-full h-full bg-cover" data-alt="A professional portrait of a person in a muted, dark setting, with subtle digital overlay lines indicating facial recognition point mapping. The color palette consists of deep slate and neon emerald accents. The mood is serious and investigative, representing a secure forensic check. High contrast and sharp focus capture the technical vigilance of the DeepScan app's user interface." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCsBNyq9ZzbSc2qyfHcnZutfdozAgOTSJH37laLSty8ESlwzXwfumTbg6nCrHWUAK0PZaZYW6LcBdXMjzz5H9nBD4ewN9WpPA2vMYd3t413eqdZG9pu1QkM6lmXL3KQkABixxfsmODQUWoNorIdgs3wC20HcLQWQAM1FjjjDcXTjGEpOFatJoL45Aqfpg8fLM_I79bkeni0AUTsTfOyhwqmG1aHQYlP_OPoUaMN9jjJI8BooK9hu1AmYyE-KRipaElBi_yivaq1wWkv')"></div>
+</div>
+<div class="flex-grow">
+<div class="flex items-center gap-2">
+<span class="text-on-surface font-medium">profile_verification_v2.jpg</span>
+<span class="px-2 py-0.5 rounded text-[10px] bg-secondary-container/20 text-secondary font-label-mono">AUTHENTIC</span>
+</div>
+<p class="text-on-surface-variant text-body-sm">Analysis complete • 11:45 UTC • Confidence: 99.2%</p>
+</div>
+<button class="material-symbols-outlined text-outline group-hover:text-secondary transition-colors">arrow_forward_ios</button>
+</div>
+<!-- Record 3 -->
+<div class="flex items-center p-4 glass-panel rounded-lg hover:bg-surface-container-highest transition-colors group">
+<div class="w-12 h-12 rounded bg-surface-container-highest flex items-center justify-center mr-4 border border-outline-variant overflow-hidden">
+<span class="material-symbols-outlined text-outline">audio_file</span>
+</div>
+<div class="flex-grow">
+<div class="flex items-center gap-2">
+<span class="text-on-surface font-medium">call_recording_intercept.wav</span>
+<span class="px-2 py-0.5 rounded text-[10px] bg-surface-variant text-outline font-label-mono">PROCESSING...</span>
+</div>
+<p class="text-on-surface-variant text-body-sm">Deep spectrogram mapping in progress • Est. 45s</p>
+</div>
+<div class="w-6 h-6 border-2 border-secondary border-t-transparent rounded-full animate-spin"></div>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 bg-surface-container-lowest border-t border-outline-variant flex justify-around items-center px-gutter py-2 pb-safe rounded-t-xl">
+
+  <!-- Input - ACTIVE -->
+  <a href="index.html"
+     class="flex flex-col items-center justify-center text-secondary bg-secondary-container/20 rounded-xl px-4 py-1.5 transition-all active:scale-90 tap-highlight-none">
+    <span class="material-symbols-outlined text-xl"
+          style="font-variation-settings: 'FILL' 1;">upload_file</span>
+    <span class="text-label-mono font-label-mono text-[11px] font-bold">Input</span>
+  </a>
+
+  <!-- Live -->
+  <a href="live.html"
+     class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all active:scale-90 tap-highlight-none px-3 py-1">
+    <span class="material-symbols-outlined text-xl">videocam</span>
+    <span class="text-label-mono font-label-mono text-[11px]">Live</span>
+  </a>
+
+  <!-- XAI -->
+  <a href="xai.html"
+     class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all active:scale-90 tap-highlight-none px-3 py-1">
+    <span class="material-symbols-outlined text-xl">psychology</span>
+    <span class="text-label-mono font-label-mono text-[11px]">XAI</span>
+  </a>
+
+  <!-- Metrics -->
+  <a href="metrics.html"
+     class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all active:scale-90 tap-highlight-none px-3 py-1">
+    <span class="material-symbols-outlined text-xl">analytics</span>
+    <span class="text-label-mono font-label-mono text-[11px]">Metrics</span>
+  </a>
+
+</nav><!-- Interactive Atmospheric Element -->
+<div class="fixed inset-0 pointer-events-none opacity-20 z-[-1]">
+
+</div>
+<script>
+        // Micro-interaction for hover effects on input cards
+        const cards = document.querySelectorAll('.group');
+        cards.forEach(card => {
+            card.addEventListener('mousedown', () => {
+                card.style.transform = 'scale(0.98)';
+            });
+            card.addEventListener('mouseup', () => {
+                card.style.transform = 'scale(1)';
+            });
+        });
+
+        // Simulating forensic text ticker
+        const forensicMessages = [
+            "ID: STREAM_INIT_001_A",
+            "STATUS: WAITING_FOR_INPUT",
+            "SENSORS: STANDBY",
+            "ENGINE: v4.2.0_FORENSIC",
+            "CIPHER: AES-256_ACTIVE"
+        ];
+        let messageIndex = 0;
+        
+        // This could be placed in a status bar if one was designed
+        console.log("DeepScan Engine Initialized...");
+    </script>
+
+
+
+
+</body></html>

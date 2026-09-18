@@ -1,0 +1,297 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+<title>DeepScan Forensic - Live Detection</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&amp;family=Inter:wght@400;500;700&amp;family=JetBrains+Mono:wght@400;500;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@100..900&amp;family=Inter:wght@100..900&amp;family=JetBrains+Mono:wght@100..900&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-fixed-dim": "#ffb2b7",
+                        "surface-container": "#102034",
+                        "on-error": "#690005",
+                        "tertiary": "#ffb2b7",
+                        "primary-fixed": "#dae2fd",
+                        "on-tertiary-fixed": "#40000d",
+                        "surface-container-high": "#1b2b3f",
+                        "on-background": "#d3e4fe",
+                        "tertiary-fixed": "#ffdadb",
+                        "error": "#ffb4ab",
+                        "primary": "#bec6e0",
+                        "on-primary-fixed": "#131b2e",
+                        "on-tertiary-fixed-variant": "#92002a",
+                        "error-container": "#93000a",
+                        "on-tertiary": "#67001b",
+                        "on-surface": "#d3e4fe",
+                        "primary-container": "#0f172a",
+                        "on-tertiary-container": "#ee3a5a",
+                        "outline": "#909097",
+                        "on-primary": "#283044",
+                        "inverse-primary": "#565e74",
+                        "secondary": "#4edea3",
+                        "surface-container-low": "#0b1c30",
+                        "inverse-on-surface": "#213145",
+                        "on-secondary-fixed-variant": "#005236",
+                        "outline-variant": "#45464d",
+                        "tertiary-container": "#39000b",
+                        "surface-tint": "#bec6e0",
+                        "on-primary-container": "#798098",
+                        "on-error-container": "#ffdad6",
+                        "surface-container-highest": "#26364a",
+                        "background": "#031427",
+                        "surface": "#031427",
+                        "on-surface-variant": "#c6c6cd",
+                        "secondary-fixed": "#6ffbbe",
+                        "on-secondary-fixed": "#002113",
+                        "secondary-container": "#00a572",
+                        "surface-bright": "#2a3a4f",
+                        "primary-fixed-dim": "#bec6e0",
+                        "inverse-surface": "#d3e4fe",
+                        "surface-container-lowest": "#000f21",
+                        "on-secondary": "#003824",
+                        "secondary-fixed-dim": "#4edea3",
+                        "surface-variant": "#26364a",
+                        "surface-dim": "#031427",
+                        "on-secondary-container": "#00311f",
+                        "on-primary-fixed-variant": "#3f465c"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "gutter": "12px",
+                        "component-padding": "16px",
+                        "margin-mobile": "16px",
+                        "margin-desktop": "32px",
+                        "base": "4px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Hanken Grotesk"],
+                        "body-lg": ["Inter"],
+                        "headline-lg-mobile": ["Hanken Grotesk"],
+                        "label-mono": ["JetBrains Mono"],
+                        "headline-lg": ["Hanken Grotesk"],
+                        "body-sm": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-lg-mobile": ["26px", {"lineHeight": "32px", "fontWeight": "700"}],
+                        "label-mono": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .scanner-line {
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #4edea3, transparent);
+            animation: scan 3s ease-in-out infinite;
+            position: absolute;
+            left: 0;
+            right: 0;
+            z-index: 10;
+        }
+        @keyframes scan {
+            0% { top: 0%; opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { top: 100%; opacity: 0; }
+        }
+        .pulse-emerald {
+            animation: pulse-glow 2s infinite;
+        }
+        @keyframes pulse-glow {
+            0% { box-shadow: 0 0 0 0 rgba(78, 222, 163, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(78, 222, 163, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(78, 222, 163, 0); }
+        }
+        body {
+            background-color: #031427;
+            -webkit-tap-highlight-color: transparent;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="flex flex-col min-h-screen text-on-surface select-none">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-surface-dim border-b border-outline-variant flex justify-between items-center px-margin-mobile h-16"><div class="flex items-center gap-3"><div class="flex items-center gap-2"><span class="material-symbols-outlined text-secondary text-2xl" style="font-variation-settings: 'FILL' 1;">shield_with_heart</span><h1 class="text-headline-md font-headline-md font-bold tracking-tight text-on-background">SECAI</h1></div></div><div class="flex items-center gap-3"><div class="flex items-center gap-1.5 bg-surface-container-high/80 backdrop-blur-md px-2.5 py-1 rounded-full border border-secondary/30"><span class="w-2 h-2 rounded-full bg-secondary animate-pulse"></span><span class="text-[10px] font-label-mono text-secondary uppercase tracking-widest">LIVE_FEED</span></div><div class="flex items-center gap-2 bg-surface-container-high px-3 py-1.5 rounded-full border border-outline-variant/30"><span class="material-symbols-outlined text-primary text-sm" style="font-variation-settings: 'FILL' 1;">account_circle</span><span class="text-label-mono font-label-mono text-on-surface">Yash</span></div></div></header>
+<main class="flex-grow pt-16 pb-24 overflow-y-auto"><div class="bg-surface-container-lowest border-b border-outline-variant/40 px-margin-mobile py-2 flex items-center justify-between text-label-mono font-label-mono text-xs"><div class="flex items-center gap-2 overflow-hidden"><span class="w-2 h-2 rounded-full bg-secondary shrink-0"></span><span class="text-secondary font-bold tracking-wider shrink-0">STEP 02 OF 04</span><span class="text-on-surface-variant shrink-0">•</span><span class="text-on-surface font-semibold tracking-wide uppercase truncate">REAL-TIME MULTIMODAL INFERENCE &amp; PIPELINE</span></div><span class="text-[10px] text-secondary bg-secondary/10 px-2 py-0.5 rounded font-mono shrink-0 ml-2">ACTIVE</span></div>
+<!-- 1. MULTIMEDIA INPUT CANVAS -->
+<section class="relative w-full aspect-[3/4] bg-surface-container-lowest overflow-hidden"><div class="absolute inset-0 scanner-line" style="animation-duration: 2.8s;"></div><div class="w-full h-full bg-cover bg-center" data-alt="A cinematic, high-resolution portrait of a person looking directly into a mobile camera. Overlaid on the face are delicate, glowing teal geometric mesh lines and focal point indicators characteristic of advanced AI biometric scanning. The background is a dimly lit technical lab with soft bokeh blue and green lights, creating a professional forensic and cyber-security atmosphere."><div class="absolute inset-0 bg-gradient-to-t from-background/90 via-transparent to-transparent"></div></div><div class="absolute inset-0 bg-[radial-gradient(#4edea3_1px,transparent_1px)] [background-size:24px_24px] opacity-10 pointer-events-none"></div><div class="absolute top-4 left-4 right-4 flex items-center justify-between z-20"><div class="flex items-center gap-2"><div class="flex items-center gap-2 bg-surface-container-high/90 backdrop-blur-md px-3 py-1 rounded-full border border-secondary/30"><span class="w-2 h-2 rounded-full bg-secondary animate-pulse"></span><span class="text-label-mono font-label-mono text-secondary text-xs uppercase tracking-wider font-semibold">ANALYZING STREAM</span></div><div class="bg-surface-container-high/90 backdrop-blur-md px-2.5 py-1 rounded-full border border-outline-variant/40 text-label-mono font-label-mono text-primary text-xs">60 FPS</div></div><div class="bg-secondary text-on-secondary px-2.5 py-1 rounded text-label-mono font-label-mono text-[11px] font-bold tracking-wider shadow-md">SUBJECT_ID: AF-7092</div></div><div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-80 border-2 border-secondary/30 rounded-2xl pointer-events-none"><div class="absolute top-0 left-0 w-6 h-6 border-t-4 border-l-4 border-secondary -mt-1 -ml-1 rounded-tl-lg"></div><div class="absolute top-0 right-0 w-6 h-6 border-t-4 border-r-4 border-secondary -mt-1 -mr-1 rounded-tr-lg"></div><div class="absolute bottom-0 left-0 w-6 h-6 border-b-4 border-l-4 border-secondary -mb-1 -ml-1 rounded-bl-lg"></div><div class="absolute bottom-0 right-0 w-6 h-6 border-b-4 border-r-4 border-secondary -mb-1 -mr-1 rounded-br-lg"></div><div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center opacity-40"><span class="material-symbols-outlined text-secondary text-2xl">filter_center_focus</span></div></div></section>
+<!-- 2. ANALYSIS RESULT SECTION (BENTO STYLE) -->
+<div class="px-margin-mobile -mt-12 relative z-20 space-y-4">
+<!-- Result Main Card -->
+<div class="bg-surface-container-high border border-outline-variant p-component-padding rounded-xl shadow-2xl backdrop-blur-xl">
+<div class="flex justify-between items-start mb-6">
+<div>
+<p class="text-label-mono font-label-mono text-on-surface-variant uppercase mb-1">Analysis Status</p>
+<h2 class="text-headline-lg-mobile font-headline-lg-mobile text-secondary flex items-center gap-2">
+                            REAL
+                            <span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">verified</span>
+</h2>
+</div>
+<div class="text-right">
+<p class="text-label-mono font-label-mono text-on-surface-variant uppercase mb-1">Confidence</p>
+<p class="text-headline-md font-headline-md text-on-surface">98.4<span class="text-body-sm text-on-surface-variant">%</span></p>
+</div>
+</div>
+<!-- Confidence Gauge -->
+<div class="w-full h-3 bg-surface-container rounded-full overflow-hidden mb-6">
+<div class="h-full bg-secondary pulse-emerald" style="width: 98.4%"></div>
+</div>
+<!-- Forensic Indicators Grid -->
+<div class="grid grid-cols-2 gap-3">
+<div class="bg-surface-container-highest p-3 rounded-xl flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-secondary/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-secondary text-sm" style="font-variation-settings: 'FILL' 1;">memory</span>
+</div>
+<div>
+<p class="text-[10px] font-label-mono text-on-surface-variant uppercase leading-none mb-1">Inference</p>
+<p class="text-body-sm font-bold text-on-surface">On-Device</p>
+</div>
+</div>
+<div class="bg-surface-container-highest p-3 rounded-xl flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-secondary/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-secondary text-sm" style="font-variation-settings: 'FILL' 1;">lock</span>
+</div>
+<div>
+<p class="text-[10px] font-label-mono text-on-surface-variant uppercase leading-none mb-1">Execution</p>
+<p class="text-body-sm font-bold text-on-surface">Secure Model</p>
+</div>
+</div>
+</div>
+</div>
+<!-- XAI Section (Forensic Cards) -->
+<div class="grid grid-cols-1 gap-4">
+<div class="bg-surface-container border border-outline-variant p-component-padding rounded-xl">
+<div class="flex items-center justify-between mb-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-sm">visibility</span>
+<h3 class="text-label-mono font-label-mono text-on-surface uppercase">Visual Branch 3B</h3>
+</div>
+<span class="text-[10px] font-label-mono text-secondary px-2 py-0.5 bg-secondary/10 rounded">CONSISTENT</span>
+</div>
+<div class="flex gap-4">
+<div class="w-20 h-20 rounded-lg bg-cover bg-center border border-outline-variant" data-alt="A forensic heat map of a human face in a dark navy blue setting. The heat map uses a vibrant spectrum from cool violets to intense glowing reds, highlighting active biometric focal points around the eyes and mouth. The style is hyper-detailed, reminiscent of professional high-end security software visualization."></div>
+<div class="flex-grow space-y-2">
+<div class="flex justify-between items-center text-body-sm">
+<span class="text-on-surface-variant">Texture Consistency</span>
+<span class="text-secondary">High</span>
+</div>
+<div class="flex justify-between items-center text-body-sm">
+<span class="text-on-surface-variant">Liveness Check</span>
+<span class="text-secondary">Pass</span>
+</div>
+<div class="flex justify-between items-center text-body-sm">
+<span class="text-on-surface-variant">Artifact Density</span>
+<span class="text-secondary">0.02%</span>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-surface-container border border-outline-variant p-component-padding rounded-xl">
+<div class="flex items-center justify-between mb-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-sm">mic</span>
+<h3 class="text-label-mono font-label-mono text-on-surface uppercase">Audio Branch 3D</h3>
+</div>
+<span class="text-[10px] font-label-mono text-secondary px-2 py-0.5 bg-secondary/10 rounded">CONSISTENT</span>
+</div>
+<div class="flex gap-4">
+<div class="w-20 h-20 rounded-lg bg-cover bg-center border border-outline-variant" data-alt="A detailed digital audio spectrogram visualization in a deep slate and navy color palette. Vertical pillars of glowing amber and yellow represent frequency peaks across a pitch-black timeline. The image resembles a sophisticated diagnostic forensic dashboard for sound analysis in a modern cyber-intelligence environment."></div>
+<div class="flex-grow space-y-2">
+<div class="flex justify-between items-center text-body-sm">
+<span class="text-on-surface-variant">Spectral Noise</span>
+<span class="text-secondary">Low</span>
+</div>
+<div class="flex justify-between items-center text-body-sm">
+<span class="text-on-surface-variant">Vocoder Match</span>
+<span class="text-secondary">0.99</span>
+</div>
+<div class="flex justify-between items-center text-body-sm">
+<span class="text-on-surface-variant">Lip Sync Dev</span>
+<span class="text-secondary">0.0ms</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Forensic Logs/Process -->
+<div class="bg-surface-container-low p-component-padding rounded-xl border border-outline-variant/30"><div class="flex items-center justify-between mb-4"><p class="text-label-mono font-label-mono text-on-surface-variant uppercase text-[10px] tracking-wider font-semibold">Forensic Methodology Pipeline</p><span class="text-[10px] font-label-mono text-secondary bg-secondary/10 px-2 py-0.5 rounded border border-secondary/20">5 STAGES MONITORED</span></div><div class="space-y-3"><div class="flex items-start gap-3"><span class="material-symbols-outlined text-secondary text-sm mt-0.5" style="font-variation-settings: 'FILL' 1;">check_circle</span><div class="flex-grow"><div class="flex justify-between items-center"><p class="text-body-sm text-on-surface font-semibold">Step 1: Input Ingestion</p><span class="text-[10px] font-label-mono text-secondary font-medium">60 FPS • COMPLETE</span></div><p class="text-[11px] font-label-mono text-on-surface-variant">RGB video feed, spatial audio &amp; temporal streaming frames normalized</p></div></div><div class="flex items-start gap-3"><span class="material-symbols-outlined text-secondary text-sm mt-0.5" style="font-variation-settings: 'FILL' 1;">check_circle</span><div class="flex-grow"><div class="flex justify-between items-center"><p class="text-body-sm text-on-surface font-semibold">Step 2: Dual-Branch Spatial &amp; Audio Analysis</p><span class="text-[10px] font-label-mono text-secondary font-medium">98% PASS</span></div><p class="text-[11px] font-label-mono text-on-surface-variant">Texture consistency 98%, artifact density 0.02%, vocoder match 0.99</p></div></div><div class="flex items-start gap-3"><span class="material-symbols-outlined text-secondary text-sm mt-0.5" style="font-variation-settings: 'FILL' 1;">check_circle</span><div class="flex-grow"><div class="flex justify-between items-center"><p class="text-body-sm text-on-surface font-semibold">Step 3: Multimodal Feature Fusion</p><span class="text-[10px] font-label-mono text-secondary font-medium">SYNCHRONIZED</span></div><p class="text-[11px] font-label-mono text-on-surface-variant">Cross-attention fusion synchronized across visual &amp; spectral embeddings</p></div></div><div class="flex items-start gap-3"><span class="material-symbols-outlined text-secondary text-sm mt-0.5 animate-pulse">sync</span><div class="flex-grow"><div class="flex justify-between items-center"><p class="text-body-sm text-on-surface font-semibold">Step 4: Adversarial Robustness Check</p><span class="text-[10px] font-label-mono text-secondary animate-pulse font-medium">ACTIVE</span></div><p class="text-[11px] font-label-mono text-on-surface-variant">Testing adversarial perturbation immunity and compression artifact tolerance</p></div></div><div class="flex items-start gap-3 opacity-60"><span class="material-symbols-outlined text-outline text-sm mt-0.5">pending</span><div class="flex-grow"><div class="flex justify-between items-center"><p class="text-body-sm text-on-surface font-medium">Step 5: Decision Aggregation</p><span class="text-[10px] font-label-mono text-on-surface-variant font-medium">QUEUED</span></div><p class="text-[11px] font-label-mono text-on-surface-variant">Generating SHAP heatmap overlays and final forensic verdict aggregation</p></div></div></div></div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 bg-surface-container-lowest border-t border-outline-variant flex justify-around items-center px-gutter py-2 pb-safe rounded-t-xl">
+
+  <!-- Input -->
+  <a href="index.html"
+     class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all active:scale-90 tap-highlight-none px-3 py-1">
+    <span class="material-symbols-outlined text-xl">upload_file</span>
+    <span class="text-label-mono font-label-mono text-[11px]">Input</span>
+  </a>
+
+  <!-- Live - ACTIVE -->
+  <a href="live.html"
+     class="flex flex-col items-center justify-center text-secondary bg-secondary-container/20 rounded-xl px-4 py-1.5 transition-all active:scale-90 tap-highlight-none">
+    <span class="material-symbols-outlined text-xl"
+          style="font-variation-settings: 'FILL' 1;">videocam</span>
+    <span class="text-label-mono font-label-mono text-[11px] font-bold">Live</span>
+  </a>
+
+  <!-- XAI -->
+  <a href="xai.html"
+     class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all active:scale-90 tap-highlight-none px-3 py-1">
+    <span class="material-symbols-outlined text-xl">psychology</span>
+    <span class="text-label-mono font-label-mono text-[11px]">XAI</span>
+  </a>
+
+  <!-- Metrics -->
+  <a href="metrics.html"
+     class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all active:scale-90 tap-highlight-none px-3 py-1">
+    <span class="material-symbols-outlined text-xl">analytics</span>
+    <span class="text-label-mono font-label-mono text-[11px]">Metrics</span>
+  </a>
+
+</nav><!-- Micro-interaction Script -->
+<script>
+        // Simple interactive feedback for gauge pulse
+        const resultCard = document.querySelector('.bg-surface-container-high');
+        resultCard.addEventListener('touchstart', () => {
+            resultCard.style.transform = 'scale(0.98)';
+            resultCard.style.transition = 'transform 0.1s ease';
+        });
+        resultCard.addEventListener('touchend', () => {
+            resultCard.style.transform = 'scale(1)';
+        });
+
+        // Atmospheric scan line speed variability simulation
+        const scanLine = document.querySelector('.scanner-line');
+        setInterval(() => {
+            const randomDur = 2 + Math.random() * 2;
+            scanLine.style.animationDuration = `${randomDur}s`;
+        }, 4000);
+    </script>
+
+
+
+
+</body></html>

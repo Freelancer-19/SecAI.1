@@ -1,0 +1,339 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>DeepScan Forensic | XAI Analysis</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@500;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary-fixed-dim": "#ffb2b7",
+                    "surface-container": "#102034",
+                    "on-error": "#690005",
+                    "tertiary": "#ffb2b7",
+                    "primary-fixed": "#dae2fd",
+                    "on-tertiary-fixed": "#40000d",
+                    "surface-container-high": "#1b2b3f",
+                    "on-background": "#d3e4fe",
+                    "tertiary-fixed": "#ffdadb",
+                    "error": "#ffb4ab",
+                    "primary": "#bec6e0",
+                    "on-primary-fixed": "#131b2e",
+                    "on-tertiary-fixed-variant": "#92002a",
+                    "error-container": "#93000a",
+                    "on-tertiary": "#67001b",
+                    "on-surface": "#d3e4fe",
+                    "primary-container": "#0f172a",
+                    "on-tertiary-container": "#ee3a5a",
+                    "outline": "#909097",
+                    "on-primary": "#283044",
+                    "inverse-primary": "#565e74",
+                    "secondary": "#4edea3",
+                    "surface-container-low": "#0b1c30",
+                    "inverse-on-surface": "#213145",
+                    "on-secondary-fixed-variant": "#005236",
+                    "outline-variant": "#45464d",
+                    "tertiary-container": "#39000b",
+                    "surface-tint": "#bec6e0",
+                    "on-primary-container": "#798098",
+                    "on-error-container": "#ffdad6",
+                    "surface-container-highest": "#26364a",
+                    "background": "#031427",
+                    "surface": "#031427",
+                    "on-surface-variant": "#c6c6cd",
+                    "secondary-fixed": "#6ffbbe",
+                    "on-secondary-fixed": "#002113",
+                    "secondary-container": "#00a572",
+                    "surface-bright": "#2a3a4f",
+                    "primary-fixed-dim": "#bec6e0",
+                    "inverse-surface": "#d3e4fe",
+                    "surface-container-lowest": "#000f21",
+                    "on-secondary": "#003824",
+                    "secondary-fixed-dim": "#4edea3",
+                    "surface-variant": "#26364a",
+                    "surface-dim": "#031427",
+                    "on-secondary-container": "#00311f",
+                    "on-primary-fixed-variant": "#3f465c"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "gutter": "12px",
+                    "component-padding": "16px",
+                    "margin-mobile": "16px",
+                    "margin-desktop": "32px",
+                    "base": "4px"
+            },
+            "fontFamily": {
+                    "headline-md": ["Hanken Grotesk"],
+                    "body-lg": ["Inter"],
+                    "headline-lg-mobile": ["Hanken Grotesk"],
+                    "label-mono": ["JetBrains Mono"],
+                    "headline-lg": ["Hanken Grotesk"],
+                    "body-sm": ["Inter"]
+            },
+            "fontSize": {
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["26px", {"lineHeight": "32px", "fontWeight": "700"}],
+                    "label-mono": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #031427;
+            color: #d3e4fe;
+            -webkit-font-smoothing: antialiased;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(144, 144, 151, 0.2);
+        }
+        .glow-emerald {
+            box-shadow: 0 0 15px rgba(78, 222, 163, 0.15);
+        }
+        .pulse-detection {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: .5; }
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #0b1c30;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #45464d;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="font-body-lg text-body-lg selection:bg-secondary/30 pb-24">
+<!-- TopAppBar Shell -->
+<header class="fixed top-0 left-0 w-full z-50 bg-surface-dim border-b border-outline-variant flex justify-between items-center px-margin-mobile h-16"><div class="flex items-center gap-3"><span class="material-symbols-outlined text-primary text-2xl">shield_with_heart</span><h1 class="text-headline-md font-headline-md font-bold tracking-tight text-on-background">SECAI</h1></div><div class="flex items-center gap-3"><span class="text-label-mono font-label-mono text-secondary px-2.5 py-1 bg-secondary/10 border border-secondary/20 rounded whitespace-nowrap text-[11px] tracking-wide">LIVE_FEED</span><div class="flex items-center gap-2 pl-3 border-l border-outline-variant"><div class="w-8 h-8 rounded-full bg-secondary-container/20 border border-secondary/20 flex items-center justify-center text-label-mono font-label-mono text-secondary font-bold text-sm">Y</div><span class="text-label-mono font-label-mono text-on-surface text-sm">Yash</span></div></div></header>
+<main class="mt-20 px-margin-mobile max-w-5xl mx-auto space-y-6">
+<!-- Forensic Status Header -->
+<div class="flex items-center gap-2 px-3 py-1.5 bg-surface-container-low border border-outline-variant/30 rounded-lg text-label-mono font-label-mono text-secondary"><span class="material-symbols-outlined text-sm text-secondary">track_changes</span><span class="">STEP 03 OF 04 • EXPLAINABLE FORENSIC EVIDENCE (XAI)</span></div><section class="flex flex-col md:flex-row justify-between items-end md:items-center gap-4 mb-8">
+<div>
+<p class="text-label-mono font-label-mono text-on-surface-variant uppercase tracking-widest">Case ID: #FNS-9242-X</p>
+<h2 class="text-headline-lg-mobile font-headline-lg-mobile text-on-surface">XAI Forensic Analysis</h2>
+</div>
+<div class="flex gap-2">
+<button class="bg-primary-container text-on-primary-container border border-outline-variant px-4 py-2 rounded-xl flex items-center gap-2 text-label-mono font-label-mono hover:bg-surface-container-high transition-all active:scale-95">
+<span class="material-symbols-outlined text-sm">history</span> Security Logs
+                </button>
+<button class="bg-secondary-container text-on-secondary-container px-4 py-2 rounded-xl flex items-center gap-2 text-label-mono font-label-mono hover:brightness-110 transition-all active:scale-95 shadow-lg shadow-secondary/10">
+<span class="material-symbols-outlined text-sm">terminal</span> Technical Details
+                </button>
+</div>
+</section>
+<!-- Main Forensic Canvas (Bento Grid) -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+<!-- Visual Branch: Heatmap -->
+<div class="md:col-span-7 glass-panel rounded-xl overflow-hidden flex flex-col">
+<div class="p-4 border-b border-outline-variant flex justify-between items-center bg-surface-container-low">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary">visibility</span>
+<span class="text-label-mono font-label-mono text-on-surface">VISUAL BRANCH 3B: GRAD-CAM</span>
+</div>
+<span class="text-label-mono font-label-mono bg-error-container/20 text-error px-2 py-0.5 rounded border border-error/20">98.4% ANOMALY</span>
+</div>
+<div class="relative flex-grow min-h-[320px] bg-black">
+<img class="w-full h-auto object-cover rounded-lg" alt="Grad-CAM Forensic Heatmap Analysis" src="https://lh3.googleusercontent.com/aida/AEtjO1WsUqdl-EqKK3RZmFmGPO3h2mwsCDVFHaRb8QJKHKklueCNMGLrs450RB4eBchL3SYbpt0dqX4MbxWfKQw23ItMQUEydSixCqxPU01o9TuSIfdSLkgKJ4WRvijlyCG7XMhuH3VatrKDO_ZgZ1XjcH2QB5_6jp04tJgNHKSgu5L3wINwGnD9L6dItNMOpgNe-1gktN_hNJ3czTTXdlObuuzQQ1bi_eO6l_nvIFX1yrGEaH_y9eJ4M62R00v4OklPwFr_ZwmVwfJ-dA">
+<div class="absolute inset-0 pointer-events-none border-[12px] border-transparent border-t-error/20 border-r-error/20"></div>
+<!-- Detection Markers -->
+<div class="absolute top-1/2 left-1/3 w-8 h-8 border border-error border-dashed rounded-full pulse-detection"></div>
+<div class="absolute top-1/4 right-1/4 w-12 h-12 border border-error border-dashed rounded-full pulse-detection"></div>
+</div>
+<div class="p-4 bg-surface-container-low text-body-sm font-body-sm text-on-surface-variant italic">
+                    Analysis shows significant temporal inconsistency in periorbital muscle movement and synthetic texture artifacts in the nasolabial fold.
+                </div>
+</div>
+<!-- Modality Contribution Side Panel -->
+<div class="md:col-span-5 flex flex-col gap-6">
+<div class="glass-panel p-6 rounded-xl flex flex-col h-full">
+<h3 class="text-label-mono font-label-mono text-on-surface-variant mb-4 uppercase">Modality Contribution</h3>
+<div class="space-y-6">
+<!-- Visual Gauge -->
+<div>
+<div class="flex justify-between text-label-mono font-label-mono mb-2">
+<span class="">Visual Features</span>
+<span class="text-secondary">72%</span>
+</div>
+<div class="h-2 w-full bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-secondary w-[72%] glow-emerald" style="transition: width 1.5s cubic-bezier(0.34, 1.56, 0.64, 1);"></div>
+</div>
+</div>
+<!-- Audio Gauge -->
+<div>
+<div class="flex justify-between text-label-mono font-label-mono mb-2">
+<span class="">Audio Features</span>
+<span class="text-primary">28%</span>
+</div>
+<div class="h-2 w-full bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[28%]" style="transition: width 1.5s cubic-bezier(0.34, 1.56, 0.64, 1);"></div>
+</div>
+</div>
+</div>
+<div class="mt-auto pt-6 border-t border-outline-variant/30 text-center"><div class="inline-flex flex-col items-center justify-center px-8 py-3 rounded-xl bg-error-container/20 border border-error/30 shadow-lg mb-3"><span class="text-3xl font-headline-lg font-bold text-error tracking-wider leading-none">FAKE</span><span class="text-[10px] font-label-mono text-error/80 uppercase tracking-widest mt-1">Synthesized Media</span></div><p class="text-label-mono font-label-mono text-on-surface-variant text-sm">Overall Confidence: <span class="text-error font-bold">0.94</span></p></div>
+</div>
+</div>
+<!-- Audio Branch: Spectrogram -->
+<div class="md:col-span-12 glass-panel rounded-xl overflow-hidden flex flex-col">
+<div class="p-4 border-b border-outline-variant flex justify-between items-center bg-surface-container-low">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">graphic_eq</span>
+<span class="text-label-mono font-label-mono text-on-surface">AUDIO BRANCH 3D: MEL-SPECTROGRAM</span>
+</div>
+<div class="flex items-center gap-4">
+<span class="text-label-mono font-label-mono text-primary-fixed-dim">FREQ: 16kHz - 22kHz HIGHLIGHTED</span>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer">settings_voice</span>
+</div>
+</div>
+<div class="h-48 bg-surface-container-lowest relative overflow-hidden">
+<!-- Audio Waveform Visualization -->
+<div class="absolute inset-0 flex items-end gap-[2px] px-4 py-2">
+<!-- Simulated Spectrogram Bars -->
+<script>
+                            for(let i=0; i<80; i++) {
+                                let height = Math.random() * 80 + 10;
+                                let color = height > 70 ? 'bg-error' : 'bg-primary/40';
+                                document.write(`<div class="flex-grow ${color} opacity-80" style="height: ${height}%"></div>`);
+                            }
+                        </script><div class="flex-grow bg-primary/40 opacity-80" style="height: 66.30868854436292%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 32.56039025564479%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 51.13700750094796%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 58.79726555161739%"></div><div class="flex-grow bg-error opacity-80" style="height: 87.43971592860551%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 10.82698883778133%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 29.5688329098577%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 23.951848592183946%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 66.47020653655373%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 61.235950912608374%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 10.92373150355118%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 27.552025756719793%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 44.98129875232753%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 43.76490157404164%"></div><div class="flex-grow bg-error opacity-80" style="height: 86.18135034192258%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 13.953298937183112%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 62.70105468950029%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 13.882632573237279%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 30.33187904643258%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 68.78678178681787%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 45.152859738699654%"></div><div class="flex-grow bg-error opacity-80" style="height: 88.37063616199873%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 13.722270584936593%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 19.574800732461163%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 47.13364812549935%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 67.5753363865146%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 47.5513215602995%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 17.410197731019394%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 13.187548025533902%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 54.765585991787646%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 20.554731321614312%"></div><div class="flex-grow bg-error opacity-80" style="height: 81.61128397769812%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 54.66092475900823%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 45.25928585741697%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 69.990556483976%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 27.315046330996005%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 30.630177874651814%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 37.142441419804015%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 11.984221040198273%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 45.9970411771992%"></div><div class="flex-grow bg-error opacity-80" style="height: 81.52408331020102%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 33.47874165246347%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 24.42760729330777%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 41.00514668929858%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 46.00295233444089%"></div><div class="flex-grow bg-error opacity-80" style="height: 74.05910429578798%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 47.19318812855694%"></div><div class="flex-grow bg-error opacity-80" style="height: 75.21212305976923%"></div><div class="flex-grow bg-error opacity-80" style="height: 73.51913302884323%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 65.49079021561842%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 54.419755817762905%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 13.784812123721961%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 47.697404164207164%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 67.87281564164327%"></div><div class="flex-grow bg-error opacity-80" style="height: 86.87846515553306%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 63.4764506984957%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 14.39133312016497%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 18.680997637432377%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 62.06750542879273%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 19.57730044390443%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 54.76790546532122%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 66.2244893139336%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 31.4011344590551%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 53.99914832663314%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 45.490163634243494%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 68.84481357227493%"></div><div class="flex-grow bg-error opacity-80" style="height: 82.60832414480201%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 15.164101952340046%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 63.76526469390874%"></div><div class="flex-grow bg-error opacity-80" style="height: 84.15475658754347%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 42.41833164153739%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 38.915224886512824%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 52.49462775371637%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 11.746790348892251%"></div><div class="flex-grow bg-error opacity-80" style="height: 73.90527795970402%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 12.663188916911459%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 27.8181398229742%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 16.061033107670326%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 34.77548537694196%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 68.0553512274062%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 12.135116034288638%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 33.73426001161852%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 20.231458891201754%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 32.465116497034145%"></div><div class="flex-grow bg-error opacity-80" style="height: 79.23889786431099%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 20.80294010419255%"></div><div class="flex-grow bg-error opacity-80" style="height: 79.02326961874208%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 26.486150048314848%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 68.87524081327567%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 62.575966427951506%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 52.613984494634124%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 32.61826860186584%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 58.76273295815983%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 67.17428810291916%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 10.35695896809714%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 62.43146208138927%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 53.2777265654601%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 63.26597839781522%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 62.96399554888136%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 62.21154043255177%"></div><div class="flex-grow bg-error opacity-80" style="height: 77.52255244387023%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 14.591384998610835%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 40.684548175408956%"></div><div class="flex-grow bg-error opacity-80" style="height: 88.49078694674152%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 56.49010657399445%"></div><div class="flex-grow bg-error opacity-80" style="height: 82.35900363226077%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 36.26487315152875%"></div><div class="flex-grow bg-error opacity-80" style="height: 79.70486317141791%"></div><div class="flex-grow bg-error opacity-80" style="height: 88.40717269770595%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 51.546799142243216%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 59.51943628278875%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 29.7565117635685%"></div><div class="flex-grow bg-error opacity-80" style="height: 80.72451483474906%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 33.72682701264455%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 32.065947841183196%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 38.60680478069796%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 63.348999466855176%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 28.167539095322674%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 61.01679346916572%"></div><div class="flex-grow bg-error opacity-80" style="height: 76.71138371440011%"></div><div class="flex-grow bg-error opacity-80" style="height: 70.14217420088647%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 36.16725300644188%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 52.16205513604984%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 13.945994488971722%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 59.70670187602078%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 16.697922474739705%"></div><div class="flex-grow bg-error opacity-80" style="height: 87.90710137161265%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 69.99840748750022%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 18.27123734057153%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 36.92341703681376%"></div><div class="flex-grow bg-error opacity-80" style="height: 75.90821955144148%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 30.841152696279586%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 61.940337120928206%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 60.86682907879748%"></div><div class="flex-grow bg-error opacity-80" style="height: 81.45086534082702%"></div><div class="flex-grow bg-error opacity-80" style="height: 79.92789007379208%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 47.71306385294682%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 39.571733736266665%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 51.309889023316245%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 19.547692622844373%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 54.268263304459026%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 34.216841801753716%"></div><div class="flex-grow bg-error opacity-80" style="height: 82.8747775302792%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 60.63103604766592%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 64.7000998273891%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 10.596839130035107%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 20.825427200805535%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 29.418149661402524%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 33.81337295515205%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 58.78084089243012%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 44.08841630780941%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 64.47670800444423%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 68.3655941166075%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 27.167466219375598%"></div><div class="flex-grow bg-error opacity-80" style="height: 78.4455559126464%"></div><div class="flex-grow bg-error opacity-80" style="height: 84.30012031308804%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 38.114706981516726%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 22.635215285131245%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 38.30772848825287%"></div><div class="flex-grow bg-primary/40 opacity-80" style="height: 11.506931873100772%"></div>
+</div>
+<!-- Highlight Layer -->
+<div class="absolute inset-0 bg-error/5 border-l-2 border-r-2 border-error/30 left-[60%] right-[20%] flex items-center justify-center">
+<span class="text-label-mono font-label-mono text-error text-[10px] bg-surface-container-lowest/80 px-1">SYNTHETIC PHASE SHIFT DETECTED</span>
+</div>
+</div>
+<div class="flex p-4 border-t border-outline-variant bg-surface-container-low gap-6 overflow-x-auto no-scrollbar">
+<div class="flex-shrink-0 flex items-center gap-3 border-r border-outline-variant pr-6">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<div>
+<p class="text-[10px] font-label-mono text-on-surface-variant leading-none">NOISE REDUCTION</p>
+<p class="text-label-mono font-label-mono text-secondary">ACTIVE</p>
+</div>
+</div>
+<div class="flex-shrink-0 flex items-center gap-3 border-r border-outline-variant pr-6">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<div>
+<p class="text-[10px] font-label-mono text-on-surface-variant leading-none">SAMPLING RATE</p>
+<p class="text-label-mono font-label-mono text-on-surface">44.1 kHz</p>
+</div>
+</div>
+<div class="flex-shrink-0 flex items-center gap-3">
+<span class="material-symbols-outlined text-error">warning</span>
+<div>
+<p class="text-[10px] font-label-mono text-on-surface-variant leading-none">VOCODER TRACES</p>
+<p class="text-label-mono font-label-mono text-error">CRITICAL (0.89)</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Security & Infrastructure Status -->
+<section class="grid grid-cols-2 md:grid-cols-5 gap-4">
+<div class="bg-surface-container-highest/40 border border-outline-variant/30 p-3 rounded-lg text-center">
+<span class="material-symbols-outlined text-primary mb-1">memory</span>
+<p class="text-label-mono font-label-mono text-on-surface-variant text-[10px]">INFERENCE</p>
+<p class="text-label-mono font-label-mono text-on-surface">On-Device</p>
+</div>
+<div class="bg-surface-container-highest/40 border border-outline-variant/30 p-3 rounded-lg text-center">
+<span class="material-symbols-outlined text-primary mb-1">lock</span>
+<p class="text-label-mono font-label-mono text-on-surface-variant text-[10px]">PRIVACY</p>
+<p class="text-label-mono font-label-mono text-on-surface">E2E Secure</p>
+</div>
+<div class="bg-surface-container-highest/40 border border-outline-variant/30 p-3 rounded-lg text-center">
+<span class="material-symbols-outlined text-primary mb-1">shield</span>
+<p class="text-label-mono font-label-mono text-on-surface-variant text-[10px]">ROBUSTNESS</p>
+<p class="text-label-mono font-label-mono text-on-surface">Adversarial</p>
+</div>
+<div class="bg-surface-container-highest/40 border border-outline-variant/30 p-3 rounded-lg text-center">
+<span class="material-symbols-outlined text-primary mb-1">history</span>
+<p class="text-label-mono font-label-mono text-on-surface-variant text-[10px]">TAMPER</p>
+<p class="text-label-mono font-label-mono text-on-surface">0 Detected</p>
+</div>
+<div class="bg-surface-container-highest/40 border border-outline-variant/30 p-3 rounded-lg text-center col-span-2 md:col-span-1">
+<span class="material-symbols-outlined text-primary mb-1">terminal</span>
+<p class="text-label-mono font-label-mono text-on-surface-variant text-[10px]">ENGINE</p>
+<p class="text-label-mono font-label-mono text-on-surface">v4.2.1 Stable</p>
+</div>
+</section>
+</main>
+<!-- Navigation Drawer (Implicitly Desktop side/Mobile overlay, but requested as Shell) -->
+<!-- Handled by Layout or ignored if transactional, but here for completeness based on JSON -->
+<!-- BottomNavBar Shell -->
+<nav class="fixed bottom-0 left-0 w-full z-50 bg-surface-container-lowest border-t border-outline-variant flex justify-around items-center px-gutter py-2 pb-safe rounded-t-xl">
+
+  <!-- Input -->
+  <a href="index.html"
+     class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all active:scale-90 tap-highlight-none px-3 py-1">
+    <span class="material-symbols-outlined text-xl">upload_file</span>
+    <span class="text-label-mono font-label-mono text-[11px]">Input</span>
+  </a>
+
+  <!-- Live -->
+  <a href="live.html"
+     class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all active:scale-90 tap-highlight-none px-3 py-1">
+    <span class="material-symbols-outlined text-xl">videocam</span>
+    <span class="text-label-mono font-label-mono text-[11px]">Live</span>
+  </a>
+
+  <!-- XAI - ACTIVE -->
+  <a href="xai.html"
+     class="flex flex-col items-center justify-center text-secondary bg-secondary-container/20 rounded-xl px-4 py-1.5 transition-all active:scale-90 tap-highlight-none">
+    <span class="material-symbols-outlined text-xl"
+          style="font-variation-settings: 'FILL' 1;">psychology</span>
+    <span class="text-label-mono font-label-mono text-[11px] font-bold">XAI</span>
+  </a>
+
+  <!-- Metrics -->
+  <a href="metrics.html"
+     class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all active:scale-90 tap-highlight-none px-3 py-1">
+    <span class="material-symbols-outlined text-xl">analytics</span>
+    <span class="text-label-mono font-label-mono text-[11px]">Metrics</span>
+  </a>
+
+</nav>
+<script>
+        // Micro-interactions for the gauges
+        document.addEventListener('DOMContentLoaded', () => {
+            const gauges = document.querySelectorAll('.h-full.bg-secondary, .h-full.bg-primary');
+            gauges.forEach(gauge => {
+                const finalWidth = gauge.style.width;
+                gauge.style.width = '0%';
+                setTimeout(() => {
+                    gauge.style.transition = 'width 1.5s cubic-bezier(0.34, 1.56, 0.64, 1)';
+                    gauge.style.width = finalWidth;
+                }, 300);
+            });
+        });
+    </script>
+
+
+
+
+</body></html>
