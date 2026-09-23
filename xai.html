@@ -1,7 +1,7 @@
 <!DOCTYPE html><html class="dark" lang="en"><head>
 <meta charset="utf-8">
 <meta content="width=device-width, initial-scale=1.0" name="viewport">
-<title>DeepScan Forensic | XAI Analysis</title>
+<title>SECAI Forensic | XAI Analysis</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@500;700&amp;display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
@@ -141,12 +141,19 @@
 <h2 class="text-headline-lg-mobile font-headline-lg-mobile text-on-surface">XAI Forensic Analysis</h2>
 </div>
 <div class="flex gap-2">
-<button class="bg-primary-container text-on-primary-container border border-outline-variant px-4 py-2 rounded-xl flex items-center gap-2 text-label-mono font-label-mono hover:bg-surface-container-high transition-all active:scale-95">
-<span class="material-symbols-outlined text-sm">history</span> Security Logs
-                </button>
-<button class="bg-secondary-container text-on-secondary-container px-4 py-2 rounded-xl flex items-center gap-2 text-label-mono font-label-mono hover:brightness-110 transition-all active:scale-95 shadow-lg shadow-secondary/10">
-<span class="material-symbols-outlined text-sm">terminal</span> Technical Details
-                </button>
+    <!-- Security Logs -->
+    <a href="index.html"
+       class="bg-primary-container text-on-primary-container border border-outline-variant px-4 py-2 rounded-xl flex items-center gap-2 text-label-mono font-label-mono hover:bg-surface-container-high transition-all active:scale-95">
+        <span class="material-symbols-outlined text-sm">history</span>
+        Security Logs
+    </a>
+
+    <!-- Technical Details -->
+    <a href="metrics.html"
+       class="bg-secondary-container text-on-secondary-container px-4 py-2 rounded-xl flex items-center gap-2 text-label-mono font-label-mono hover:brightness-110 transition-all active:scale-95 shadow-lg shadow-secondary/10">
+        <span class="material-symbols-outlined text-sm">terminal</span>
+        Technical Details
+    </a>
 </div>
 </section>
 <!-- Main Forensic Canvas (Bento Grid) -->
