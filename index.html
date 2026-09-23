@@ -1,7 +1,7 @@
 <!DOCTYPE html><html class="dark" lang="en"><head>
 <meta charset="utf-8">
 <meta content="width=device-width, initial-scale=1.0" name="viewport">
-<title>DeepScan Forensic - Multimedia Input</title>
+<title>SECAI</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&amp;family=Inter:wght@400;500&amp;family=JetBrains+Mono:wght@500;700&amp;display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
@@ -135,48 +135,145 @@
 <p class="text-on-surface-variant max-w-2xl">Initialize forensic analysis by selecting the source media type. Our engine supports high-fidelity processing for visual, temporal, and auditory artifacts.</p>
 </section>
 <!-- Input Grid (Bento Style) -->
+
+<!-- Hidden file inputs -->
+<input type="file" id="imageInput" accept="image/*" class="hidden">
+<input type="file" id="videoNoAudioInput" accept="video/*" class="hidden">
+<input type="file" id="videoAudioInput" accept="video/*" class="hidden">
+<input type="file" id="audioInput" accept="audio/*" class="hidden">
+
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-16">
+
 <!-- Image Only -->
-<button class="group relative flex flex-col items-start p-6 rounded-xl glass-panel glow-hover transition-all text-left overflow-hidden">
-<div class="scan-line opacity-0 group-hover:opacity-100 transition-opacity"></div>
-<div class="mb-8 p-3 rounded-lg bg-surface-container-highest text-secondary group-hover:scale-110 transition-transform duration-300">
-<span class="material-symbols-outlined text-3xl">photo_library</span>
-</div>
-<h3 class="text-on-surface font-headline-md text-xl mb-1">Image Only</h3>
-<p class="text-on-surface-variant text-body-sm mb-4">Static frames, metadata analysis, and deepfake noise detection.</p>
-<div class="mt-auto font-label-mono text-[10px] text-outline uppercase">Module: VIS-01A</div>
+<button
+    type="button"
+    onclick="openFilePicker('imageInput')"
+    class="group relative flex flex-col items-start p-6 rounded-xl glass-panel glow-hover transition-all text-left overflow-hidden"
+>
+    <div class="scan-line opacity-0 group-hover:opacity-100 transition-opacity"></div>
+
+    <div class="mb-8 p-3 rounded-lg bg-surface-container-highest text-secondary group-hover:scale-110 transition-transform duration-300">
+        <span class="material-symbols-outlined text-3xl">photo_library</span>
+    </div>
+
+    <h3 class="text-on-surface font-headline-md text-xl mb-1">Image Only</h3>
+
+    <p class="text-on-surface-variant text-body-sm mb-4">
+        Static frames, metadata analysis, and deepfake noise detection.
+    </p>
+
+    <div class="mt-auto font-label-mono text-[10px] text-outline uppercase">
+        Module: VIS-01A
+    </div>
 </button>
+
+
 <!-- Video (No Audio) -->
-<button class="group relative flex flex-col items-start p-6 rounded-xl glass-panel glow-hover transition-all text-left overflow-hidden">
-<div class="scan-line opacity-0 group-hover:opacity-100 transition-opacity" style="animation-delay: 0.5s"></div>
-<div class="mb-8 p-3 rounded-lg bg-surface-container-highest text-secondary group-hover:scale-110 transition-transform duration-300">
-<span class="material-symbols-outlined text-3xl">videocam_off</span>
-</div>
-<h3 class="text-on-surface font-headline-md text-xl mb-1">Video (No Audio)</h3>
-<p class="text-on-surface-variant text-body-sm mb-4">Temporal consistency check and optical flow forensic analysis.</p>
-<div class="mt-auto font-label-mono text-[10px] text-outline uppercase">Module: TMP-04B</div>
+<button
+    type="button"
+    onclick="openFilePicker('videoNoAudioInput')"
+    class="group relative flex flex-col items-start p-6 rounded-xl glass-panel glow-hover transition-all text-left overflow-hidden"
+>
+    <div
+        class="scan-line opacity-0 group-hover:opacity-100 transition-opacity"
+        style="animation-delay: 0.5s"
+    ></div>
+
+    <div class="mb-8 p-3 rounded-lg bg-surface-container-highest text-secondary group-hover:scale-110 transition-transform duration-300">
+        <span class="material-symbols-outlined text-3xl">videocam_off</span>
+    </div>
+
+    <h3 class="text-on-surface font-headline-md text-xl mb-1">
+        Video (No Audio)
+    </h3>
+
+    <p class="text-on-surface-variant text-body-sm mb-4">
+        Temporal consistency check and optical flow forensic analysis.
+    </p>
+
+    <div class="mt-auto font-label-mono text-[10px] text-outline uppercase">
+        Module: TMP-04B
+    </div>
 </button>
+
+
 <!-- Video (With Audio) -->
-<button class="group relative flex flex-col items-start p-6 rounded-xl glass-panel glow-hover transition-all text-left overflow-hidden border-secondary/40 bg-secondary/5">
-<div class="scan-line opacity-0 group-hover:opacity-100 transition-opacity" style="animation-delay: 1s"></div>
-<div class="mb-8 p-3 rounded-lg bg-secondary-container text-on-secondary-container group-hover:scale-110 transition-transform duration-300">
-<span class="material-symbols-outlined text-3xl">video_call</span>
-</div>
-<h3 class="text-on-surface font-headline-md text-xl mb-1">Video (With Audio)</h3>
-<p class="text-on-surface-variant text-body-sm mb-4">Dual-stream synchronization and multi-modal integrity verification.</p>
-<div class="mt-auto font-label-mono text-[10px] text-secondary uppercase font-bold">Recommended</div>
+<button
+    type="button"
+    onclick="openFilePicker('videoAudioInput')"
+    class="group relative flex flex-col items-start p-6 rounded-xl glass-panel glow-hover transition-all text-left overflow-hidden border-secondary/40 bg-secondary/5"
+>
+    <div
+        class="scan-line opacity-0 group-hover:opacity-100 transition-opacity"
+        style="animation-delay: 1s"
+    ></div>
+
+    <div class="mb-8 p-3 rounded-lg bg-secondary-container text-on-secondary-container group-hover:scale-110 transition-transform duration-300">
+        <span class="material-symbols-outlined text-3xl">video_call</span>
+    </div>
+
+    <h3 class="text-on-surface font-headline-md text-xl mb-1">
+        Video (With Audio)
+    </h3>
+
+    <p class="text-on-surface-variant text-body-sm mb-4">
+        Dual-stream synchronization and multi-modal integrity verification.
+    </p>
+
+    <div class="mt-auto font-label-mono text-[10px] text-secondary uppercase font-bold">
+        Recommended
+    </div>
 </button>
+
+
 <!-- Audio Only -->
-<button class="group relative flex flex-col items-start p-6 rounded-xl glass-panel glow-hover transition-all text-left overflow-hidden">
-<div class="scan-line opacity-0 group-hover:opacity-100 transition-opacity" style="animation-delay: 1.5s"></div>
-<div class="mb-8 p-3 rounded-lg bg-surface-container-highest text-secondary group-hover:scale-110 transition-transform duration-300">
-<span class="material-symbols-outlined text-3xl">mic</span>
-</div>
-<h3 class="text-on-surface font-headline-md text-xl mb-1">Audio Only</h3>
-<p class="text-on-surface-variant text-body-sm mb-4">Spectrogram analysis, voice cloning detection, and acoustic biometrics.</p>
-<div class="mt-auto font-label-mono text-[10px] text-outline uppercase">Module: AUD-09C</div>
+<button
+    type="button"
+    onclick="openFilePicker('audioInput')"
+    class="group relative flex flex-col items-start p-6 rounded-xl glass-panel glow-hover transition-all text-left overflow-hidden"
+>
+    <div
+        class="scan-line opacity-0 group-hover:opacity-100 transition-opacity"
+        style="animation-delay: 1.5s"
+    ></div>
+
+    <div class="mb-8 p-3 rounded-lg bg-surface-container-highest text-secondary group-hover:scale-110 transition-transform duration-300">
+        <span class="material-symbols-outlined text-3xl">mic</span>
+    </div>
+
+    <h3 class="text-on-surface font-headline-md text-xl mb-1">
+        Audio Only
+    </h3>
+
+    <p class="text-on-surface-variant text-body-sm mb-4">
+        Spectrogram analysis, voice cloning detection, and acoustic biometrics.
+    </p>
+
+    <div class="mt-auto font-label-mono text-[10px] text-outline uppercase">
+        Module: AUD-09C
+    </div>
 </button>
+
 </div>
+
+<!-- Upload Status -->
+<div
+    id="uploadStatus"
+    class="hidden mb-8 p-4 rounded-xl glass-panel border border-secondary/30"
+>
+    <div class="flex items-center gap-3">
+        <div class="w-5 h-5 border-2 border-secondary border-t-transparent rounded-full animate-spin"></div>
+        <div>
+            <p id="uploadStatusTitle" class="text-on-surface font-medium">
+                Preparing media...
+            </p>
+            <p id="uploadStatusText" class="text-on-surface-variant text-body-sm">
+                Please wait.
+            </p>
+        </div>
+    </div>
+</div>
+
 <!-- Recent Scans / Upload History -->
 <section>
 <div class="flex items-center justify-between mb-6">
@@ -266,30 +363,499 @@
 
 </div>
 <script>
-        // Micro-interaction for hover effects on input cards
-        const cards = document.querySelectorAll('.group');
-        cards.forEach(card => {
-            card.addEventListener('mousedown', () => {
-                card.style.transform = 'scale(0.98)';
-            });
-            card.addEventListener('mouseup', () => {
-                card.style.transform = 'scale(1)';
-            });
-        });
+/* =========================================================
+   DEEPSCAN MEDIA INPUT
+   - Opens the native PC/mobile file picker
+   - Restricts files by selected module
+   - Stores the selected File in IndexedDB
+   - Redirects automatically to xai.html
+   - XAI page can retrieve the original File from IndexedDB
+========================================================= */
 
-        // Simulating forensic text ticker
-        const forensicMessages = [
-            "ID: STREAM_INIT_001_A",
-            "STATUS: WAITING_FOR_INPUT",
-            "SENSORS: STANDBY",
-            "ENGINE: v4.2.0_FORENSIC",
-            "CIPHER: AES-256_ACTIVE"
-        ];
-        let messageIndex = 0;
-        
-        // This could be placed in a status bar if one was designed
-        console.log("DeepScan Engine Initialized...");
-    </script>
+const DB_NAME = "DeepScanMediaDB";
+const DB_VERSION = 1;
+const STORE_NAME = "media";
+
+function openFilePicker(inputId) {
+    const input = document.getElementById(inputId);
+
+    if (!input) {
+        console.error("File input not found:", inputId);
+        return;
+    }
+
+    // Allows selecting the same file again after returning to this page.
+    input.value = "";
+    input.click();
+}
+
+
+/* =========================================================
+   INDEXEDDB
+========================================================= */
+
+function openMediaDB() {
+    return new Promise((resolve, reject) => {
+        const request = indexedDB.open(DB_NAME, DB_VERSION);
+
+        request.onupgradeneeded = function (event) {
+            const db = event.target.result;
+
+            if (!db.objectStoreNames.contains(STORE_NAME)) {
+                db.createObjectStore(STORE_NAME, {
+                    keyPath: "id"
+                });
+            }
+        };
+
+        request.onsuccess = function () {
+            resolve(request.result);
+        };
+
+        request.onerror = function () {
+            reject(request.error);
+        };
+    });
+}
+
+
+function saveMedia(file, mediaType, moduleCode) {
+    return openMediaDB().then(db => {
+        return new Promise((resolve, reject) => {
+
+            const transaction = db.transaction(
+                STORE_NAME,
+                "readwrite"
+            );
+
+            const store = transaction.objectStore(STORE_NAME);
+
+            const record = {
+                id: "current",
+                file: file,
+                fileName: file.name,
+                fileType: file.type || "",
+                fileSize: file.size,
+                lastModified: file.lastModified,
+                mediaType: mediaType,
+                module: moduleCode,
+                savedAt: Date.now()
+            };
+
+            const request = store.put(record);
+
+            request.onsuccess = function () {
+                resolve(record);
+            };
+
+            request.onerror = function () {
+                reject(request.error);
+            };
+        });
+    });
+}
+
+
+/* =========================================================
+   FILE VALIDATION
+========================================================= */
+
+function isImage(file) {
+    return file.type.startsWith("image/");
+}
+
+function isAudio(file) {
+    return file.type.startsWith("audio/");
+}
+
+function isVideo(file) {
+    return file.type.startsWith("video/");
+}
+
+
+/*
+   Browser file pickers can reliably restrict the file to video,
+   but detecting an audio stream inside a video is not consistent
+   across all browsers.
+
+   We therefore:
+   - perform a best-effort browser check;
+   - store the selected module;
+   - recommend server-side/FFmpeg validation for production.
+*/
+function detectVideoAudio(file) {
+    return new Promise(resolve => {
+
+        const video = document.createElement("video");
+        const objectURL = URL.createObjectURL(file);
+
+        let finished = false;
+
+        function finish(result) {
+            if (finished) return;
+            finished = true;
+
+            URL.revokeObjectURL(objectURL);
+
+            video.removeAttribute("src");
+            video.load();
+
+            resolve(result);
+        }
+
+        video.preload = "metadata";
+        video.muted = false;
+        video.src = objectURL;
+
+        video.onloadedmetadata = function () {
+
+            // Browsers that expose audioTracks.
+            if (
+                typeof video.audioTracks !== "undefined" &&
+                video.audioTracks.length > 0
+            ) {
+                finish(true);
+                return;
+            }
+
+            // WebKit/Safari style detection.
+            if (
+                typeof video.webkitAudioDecodedByteCount !== "undefined" &&
+                video.webkitAudioDecodedByteCount > 0
+            ) {
+                finish(true);
+                return;
+            }
+
+            // Firefox.
+            if (
+                typeof video.mozHasAudio !== "undefined"
+            ) {
+                finish(Boolean(video.mozHasAudio));
+                return;
+            }
+
+            // Some browsers do not expose the audio stream information.
+            // Do not incorrectly reject the user's video.
+            finish(null);
+        };
+
+        video.onerror = function () {
+            finish(null);
+        };
+
+        // Safety timeout.
+        setTimeout(() => finish(null), 3000);
+    });
+}
+
+
+/* =========================================================
+   UI STATUS
+========================================================= */
+
+function showUploadStatus(title, message) {
+    const status = document.getElementById("uploadStatus");
+    const statusTitle = document.getElementById("uploadStatusTitle");
+    const statusText = document.getElementById("uploadStatusText");
+
+    status.classList.remove("hidden");
+
+    statusTitle.textContent = title;
+    statusText.textContent = message;
+}
+
+
+function hideUploadStatus() {
+    const status = document.getElementById("uploadStatus");
+
+    if (status) {
+        status.classList.add("hidden");
+    }
+}
+
+
+/* =========================================================
+   REDIRECT TO XAI
+========================================================= */
+
+function redirectToXAI() {
+
+    /*
+       The media file is already safely stored in IndexedDB.
+       XAI can retrieve it using the key "current".
+    */
+
+    window.location.href = "xai.html";
+}
+
+
+/* =========================================================
+   MAIN FILE HANDLER
+========================================================= */
+
+async function handleSelectedFile(file, selectedType) {
+
+    if (!file) return;
+
+    try {
+
+        let moduleCode = "";
+        let valid = false;
+
+        /* ---------------- IMAGE ---------------- */
+
+        if (selectedType === "image") {
+
+            moduleCode = "VIS-01A";
+
+            if (!isImage(file)) {
+                alert("Please select an image file only.");
+                return;
+            }
+
+            valid = true;
+        }
+
+
+        /* ---------------- VIDEO WITHOUT AUDIO ---------------- */
+
+        else if (selectedType === "video-no-audio") {
+
+            moduleCode = "TMP-04B";
+
+            if (!isVideo(file)) {
+                alert("Please select a video file only.");
+                return;
+            }
+
+            showUploadStatus(
+                "Checking video...",
+                "Checking whether the selected video contains an audio stream."
+            );
+
+            const hasAudio = await detectVideoAudio(file);
+
+            /*
+               null means the browser could not reliably determine
+               whether an audio stream exists. We still allow the
+               upload and store the selected module.
+            */
+            if (hasAudio === true) {
+
+                hideUploadStatus();
+
+                alert(
+                    "This video appears to contain an audio track.\n\n" +
+                    "For a video without audio, please select a video " +
+                    "that contains only the visual stream."
+                );
+
+                return;
+            }
+
+            valid = true;
+        }
+
+
+        /* ---------------- VIDEO WITH AUDIO ---------------- */
+
+        else if (selectedType === "video-audio") {
+
+            moduleCode = "TMP-04B";
+
+            if (!isVideo(file)) {
+                alert("Please select a video file only.");
+                return;
+            }
+
+            showUploadStatus(
+                "Checking video...",
+                "Checking the selected video for an audio stream."
+            );
+
+            const hasAudio = await detectVideoAudio(file);
+
+            /*
+               If browser confirms there is no audio, reject it.
+               If browser cannot determine the stream, allow it and
+               let backend/FFmpeg perform the final validation.
+            */
+            if (hasAudio === false) {
+
+                hideUploadStatus();
+
+                alert(
+                    "This video appears to have no audio track.\n\n" +
+                    "Please use the Video (No Audio) option instead."
+                );
+
+                return;
+            }
+
+            valid = true;
+        }
+
+
+        /* ---------------- AUDIO ---------------- */
+
+        else if (selectedType === "audio") {
+
+            moduleCode = "AUD-09C";
+
+            if (!isAudio(file)) {
+                alert("Please select an audio file only.");
+                return;
+            }
+
+            valid = true;
+        }
+
+
+        if (!valid) {
+            hideUploadStatus();
+            return;
+        }
+
+
+        /* =====================================================
+           SAVE FILE BEFORE REDIRECT
+        ===================================================== */
+
+        showUploadStatus(
+            "Media accepted",
+            "Saving " + file.name + " and opening XAI analysis..."
+        );
+
+        await saveMedia(
+            file,
+            selectedType,
+            moduleCode
+        );
+
+
+        /*
+           Small delay gives the user a clear status transition
+           before navigating.
+        */
+        setTimeout(() => {
+            redirectToXAI();
+        }, 350);
+
+
+    } catch (error) {
+
+        console.error("Media upload error:", error);
+
+        hideUploadStatus();
+
+        alert(
+            "Unable to prepare this media file.\n\n" +
+            "Please try another file."
+        );
+    }
+}
+
+
+/* =========================================================
+   FILE INPUT EVENTS
+========================================================= */
+
+document
+    .getElementById("imageInput")
+    .addEventListener("change", function () {
+
+        const file = this.files[0];
+
+        if (file) {
+            handleSelectedFile(file, "image");
+        }
+    });
+
+
+document
+    .getElementById("videoNoAudioInput")
+    .addEventListener("change", function () {
+
+        const file = this.files[0];
+
+        if (file) {
+            handleSelectedFile(file, "video-no-audio");
+        }
+    });
+
+
+document
+    .getElementById("videoAudioInput")
+    .addEventListener("change", function () {
+
+        const file = this.files[0];
+
+        if (file) {
+            handleSelectedFile(file, "video-audio");
+        }
+    });
+
+
+document
+    .getElementById("audioInput")
+    .addEventListener("change", function () {
+
+        const file = this.files[0];
+
+        if (file) {
+            handleSelectedFile(file, "audio");
+        }
+    });
+
+
+/* =========================================================
+   CARD PRESS MICRO-INTERACTION
+========================================================= */
+
+const cards = document.querySelectorAll(".group");
+
+cards.forEach(card => {
+
+    card.addEventListener("mousedown", () => {
+        card.style.transform = "scale(0.98)";
+    });
+
+    card.addEventListener("mouseup", () => {
+        card.style.transform = "scale(1)";
+    });
+
+    card.addEventListener("mouseleave", () => {
+        card.style.transform = "scale(1)";
+    });
+
+    card.addEventListener("touchstart", () => {
+        card.style.transform = "scale(0.98)";
+    }, { passive: true });
+
+    card.addEventListener("touchend", () => {
+        card.style.transform = "scale(1)";
+    }, { passive: true });
+});
+
+
+/* =========================================================
+   FORENSIC ENGINE
+========================================================= */
+
+const forensicMessages = [
+    "ID: STREAM_INIT_001_A",
+    "STATUS: WAITING_FOR_INPUT",
+    "SENSORS: STANDBY",
+    "ENGINE: v4.2.0_FORENSIC",
+    "CIPHER: AES-256_ACTIVE"
+];
+
+let messageIndex = 0;
+
+console.log("DeepScan Engine Initialized...");
+console.log("Media Input System Ready.");
+</script>
 
 
 
