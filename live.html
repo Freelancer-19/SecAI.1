@@ -1,7 +1,7 @@
 <!DOCTYPE html><html class="dark" lang="en"><head>
 <meta charset="utf-8">
 <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
-<title>DeepScan Forensic - Live Detection</title>
+<title>SECAI Live Detection</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&amp;family=Inter:wght@400;500;700&amp;family=JetBrains+Mono:wght@400;500;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
@@ -120,6 +120,18 @@
             70% { box-shadow: 0 0 0 10px rgba(78, 222, 163, 0); }
             100% { box-shadow: 0 0 0 0 rgba(78, 222, 163, 0); }
         }
+        #cameraFeed {
+            transform: scaleX(-1);
+        }
+        .face-detected {
+            border-color: #4edea3 !important;
+            box-shadow: 0 0 0 4px rgba(78, 222, 163, 0.12), 0 0 30px rgba(78, 222, 163, 0.25);
+        }
+        .face-capturing {
+            border-color: #4edea3 !important;
+            box-shadow: 0 0 0 8px rgba(78, 222, 163, 0.16), 0 0 45px rgba(78, 222, 163, 0.45);
+        }
+
         body {
             background-color: #031427;
             -webkit-tap-highlight-color: transparent;
@@ -132,11 +144,81 @@
   </style>
   </head>
 <body class="flex flex-col min-h-screen text-on-surface select-none">
+<!--
+  CAMERA REQUIREMENT:
+  Browser camera APIs normally require HTTPS or localhost.
+  This page detects a face locally in the browser; it does NOT identify the person.
+-->
 <!-- TopAppBar -->
 <header class="fixed top-0 w-full z-50 bg-surface-dim border-b border-outline-variant flex justify-between items-center px-margin-mobile h-16"><div class="flex items-center gap-3"><div class="flex items-center gap-2"><span class="material-symbols-outlined text-secondary text-2xl" style="font-variation-settings: 'FILL' 1;">shield_with_heart</span><h1 class="text-headline-md font-headline-md font-bold tracking-tight text-on-background">SECAI</h1></div></div><div class="flex items-center gap-3"><div class="flex items-center gap-1.5 bg-surface-container-high/80 backdrop-blur-md px-2.5 py-1 rounded-full border border-secondary/30"><span class="w-2 h-2 rounded-full bg-secondary animate-pulse"></span><span class="text-[10px] font-label-mono text-secondary uppercase tracking-widest">LIVE_FEED</span></div><div class="flex items-center gap-2 bg-surface-container-high px-3 py-1.5 rounded-full border border-outline-variant/30"><span class="material-symbols-outlined text-primary text-sm" style="font-variation-settings: 'FILL' 1;">account_circle</span><span class="text-label-mono font-label-mono text-on-surface">Yash</span></div></div></header>
 <main class="flex-grow pt-16 pb-24 overflow-y-auto"><div class="bg-surface-container-lowest border-b border-outline-variant/40 px-margin-mobile py-2 flex items-center justify-between text-label-mono font-label-mono text-xs"><div class="flex items-center gap-2 overflow-hidden"><span class="w-2 h-2 rounded-full bg-secondary shrink-0"></span><span class="text-secondary font-bold tracking-wider shrink-0">STEP 02 OF 04</span><span class="text-on-surface-variant shrink-0">•</span><span class="text-on-surface font-semibold tracking-wide uppercase truncate">REAL-TIME MULTIMODAL INFERENCE &amp; PIPELINE</span></div><span class="text-[10px] text-secondary bg-secondary/10 px-2 py-0.5 rounded font-mono shrink-0 ml-2">ACTIVE</span></div>
 <!-- 1. MULTIMEDIA INPUT CANVAS -->
-<section class="relative w-full aspect-[3/4] bg-surface-container-lowest overflow-hidden"><div class="absolute inset-0 scanner-line" style="animation-duration: 2.8s;"></div><div class="w-full h-full bg-cover bg-center" data-alt="A cinematic, high-resolution portrait of a person looking directly into a mobile camera. Overlaid on the face are delicate, glowing teal geometric mesh lines and focal point indicators characteristic of advanced AI biometric scanning. The background is a dimly lit technical lab with soft bokeh blue and green lights, creating a professional forensic and cyber-security atmosphere."><div class="absolute inset-0 bg-gradient-to-t from-background/90 via-transparent to-transparent"></div></div><div class="absolute inset-0 bg-[radial-gradient(#4edea3_1px,transparent_1px)] [background-size:24px_24px] opacity-10 pointer-events-none"></div><div class="absolute top-4 left-4 right-4 flex items-center justify-between z-20"><div class="flex items-center gap-2"><div class="flex items-center gap-2 bg-surface-container-high/90 backdrop-blur-md px-3 py-1 rounded-full border border-secondary/30"><span class="w-2 h-2 rounded-full bg-secondary animate-pulse"></span><span class="text-label-mono font-label-mono text-secondary text-xs uppercase tracking-wider font-semibold">ANALYZING STREAM</span></div><div class="bg-surface-container-high/90 backdrop-blur-md px-2.5 py-1 rounded-full border border-outline-variant/40 text-label-mono font-label-mono text-primary text-xs">60 FPS</div></div><div class="bg-secondary text-on-secondary px-2.5 py-1 rounded text-label-mono font-label-mono text-[11px] font-bold tracking-wider shadow-md">SUBJECT_ID: AF-7092</div></div><div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-80 border-2 border-secondary/30 rounded-2xl pointer-events-none"><div class="absolute top-0 left-0 w-6 h-6 border-t-4 border-l-4 border-secondary -mt-1 -ml-1 rounded-tl-lg"></div><div class="absolute top-0 right-0 w-6 h-6 border-t-4 border-r-4 border-secondary -mt-1 -mr-1 rounded-tr-lg"></div><div class="absolute bottom-0 left-0 w-6 h-6 border-b-4 border-l-4 border-secondary -mb-1 -ml-1 rounded-bl-lg"></div><div class="absolute bottom-0 right-0 w-6 h-6 border-b-4 border-r-4 border-secondary -mb-1 -mr-1 rounded-br-lg"></div><div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center opacity-40"><span class="material-symbols-outlined text-secondary text-2xl">filter_center_focus</span></div></div></section>
+<section class="relative w-full aspect-[3/4] bg-surface-container-lowest overflow-hidden">
+<div class="absolute inset-0 scanner-line" style="animation-duration: 2.8s;"></div>
+
+<!-- REAL CAMERA FEED -->
+<video id="cameraFeed"
+       class="absolute inset-0 w-full h-full object-cover"
+       autoplay
+       playsinline
+       muted></video>
+
+<!-- Dark forensic overlay -->
+<div class="absolute inset-0 bg-gradient-to-t from-background/90 via-transparent to-background/20 pointer-events-none"></div>
+<div class="absolute inset-0 bg-[radial-gradient(#4edea3_1px,transparent_1px)] [background-size:24px_24px] opacity-10 pointer-events-none"></div>
+
+<!-- Face detection frame -->
+<div id="faceFrame"
+     class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
+            w-64 h-80 border-2 border-secondary/30 rounded-2xl pointer-events-none z-20
+            transition-all duration-300">
+  <div class="absolute top-0 left-0 w-6 h-6 border-t-4 border-l-4 border-secondary -mt-1 -ml-1 rounded-tl-lg"></div>
+  <div class="absolute top-0 right-0 w-6 h-6 border-t-4 border-r-4 border-secondary -mt-1 -mr-1 rounded-tr-lg"></div>
+  <div class="absolute bottom-0 left-0 w-6 h-6 border-b-4 border-l-4 border-secondary -mb-1 -ml-1 rounded-bl-lg"></div>
+  <div class="absolute bottom-0 right-0 w-6 h-6 border-b-4 border-r-4 border-secondary -mb-1 -mr-1 rounded-br-lg"></div>
+  <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center opacity-60">
+    <span class="material-symbols-outlined text-secondary text-2xl">filter_center_focus</span>
+  </div>
+</div>
+
+<!-- Status -->
+<div class="absolute top-4 left-4 right-4 flex items-center justify-between z-30">
+  <div class="flex items-center gap-2">
+    <div class="flex items-center gap-2 bg-surface-container-high/90 backdrop-blur-md px-3 py-1 rounded-full border border-secondary/30">
+      <span id="cameraDot" class="w-2 h-2 rounded-full bg-secondary animate-pulse"></span>
+      <span id="cameraStatus" class="text-label-mono font-label-mono text-secondary text-xs uppercase tracking-wider font-semibold">STARTING CAMERA</span>
+    </div>
+    <div class="bg-surface-container-high/90 backdrop-blur-md px-2.5 py-1 rounded-full border border-outline-variant/40 text-label-mono font-label-mono text-primary text-xs">FACE SCAN</div>
+  </div>
+  <div id="subjectId" class="bg-secondary text-on-secondary px-2.5 py-1 rounded text-label-mono font-label-mono text-[11px] font-bold tracking-wider shadow-md">
+    SUBJECT_ID: SCANNING
+  </div>
+</div>
+
+<!-- Detection message -->
+<div class="absolute bottom-5 left-4 right-4 z-30">
+  <div class="bg-surface-container-high/90 backdrop-blur-md border border-secondary/30 rounded-xl px-4 py-3">
+    <p id="detectionTitle" class="text-secondary font-bold text-sm">Looking for a face...</p>
+    <p id="detectionText" class="text-on-surface-variant text-xs mt-1">Allow camera access and keep one face inside the frame.</p>
+  </div>
+</div>
+
+<!-- Hidden canvas used to save the captured face frame -->
+<canvas id="captureCanvas" class="hidden"></canvas>
+</section>
+<!-- CAMERA CAPTURE STATUS -->
+<div id="captureStatus" class="mx-4 mt-4 hidden relative z-30">
+  <div class="bg-surface-container-high border border-secondary/30 rounded-xl p-4">
+    <div class="flex items-center gap-3">
+      <span id="captureIcon" class="material-symbols-outlined text-secondary animate-pulse">face_retouching_natural</span>
+      <div>
+        <p id="captureStatusTitle" class="text-secondary font-bold text-sm">Face detected</p>
+        <p id="captureStatusText" class="text-on-surface-variant text-xs mt-1">Capturing secure face frame...</p>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- 2. ANALYSIS RESULT SECTION (BENTO STYLE) -->
 <div class="px-margin-mobile -mt-12 relative z-20 space-y-4">
 <!-- Result Main Card -->
@@ -244,7 +326,7 @@
 
   <!-- Input -->
   <a href="index.html"
-     class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all active:scale-90 tap-highlight-none px-3 py-1">
+     class="flex flex-col items-center justify-center text-on-surface-variant hover:text-secondary hover:bg-secondary-container/20 rounded-xl transition-all active:scale-90 tap-highlight-none px-3 py-1">
     <span class="material-symbols-outlined text-xl">upload_file</span>
     <span class="text-label-mono font-label-mono text-[11px]">Input</span>
   </a>
@@ -259,37 +341,393 @@
 
   <!-- XAI -->
   <a href="xai.html"
-     class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all active:scale-90 tap-highlight-none px-3 py-1">
+     class="flex flex-col items-center justify-center text-on-surface-variant hover:text-secondary hover:bg-secondary-container/20 rounded-xl transition-all active:scale-90 tap-highlight-none px-3 py-1">
     <span class="material-symbols-outlined text-xl">psychology</span>
     <span class="text-label-mono font-label-mono text-[11px]">XAI</span>
   </a>
 
   <!-- Metrics -->
   <a href="metrics.html"
-     class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all active:scale-90 tap-highlight-none px-3 py-1">
+     class="flex flex-col items-center justify-center text-on-surface-variant hover:text-secondary hover:bg-secondary-container/20 rounded-xl transition-all active:scale-90 tap-highlight-none px-3 py-1">
     <span class="material-symbols-outlined text-xl">analytics</span>
     <span class="text-label-mono font-label-mono text-[11px]">Metrics</span>
   </a>
 
 </nav><!-- Micro-interaction Script -->
 <script>
-        // Simple interactive feedback for gauge pulse
-        const resultCard = document.querySelector('.bg-surface-container-high');
-        resultCard.addEventListener('touchstart', () => {
-            resultCard.style.transform = 'scale(0.98)';
-            resultCard.style.transition = 'transform 0.1s ease';
-        });
-        resultCard.addEventListener('touchend', () => {
-            resultCard.style.transform = 'scale(1)';
-        });
+/*
+ * SECAI LIVE FACE CAPTURE
+ * - Opens the device camera
+ * - Detects a face locally using MediaPipe Face Detector
+ * - Captures the face frame automatically
+ * - Saves the captured image in IndexedDB
+ * - Redirects to xai.html
+ *
+ * NOTE:
+ * This is browser-side face detection, not biometric identity recognition.
+ */
 
-        // Atmospheric scan line speed variability simulation
-        const scanLine = document.querySelector('.scanner-line');
-        setInterval(() => {
-            const randomDur = 2 + Math.random() * 2;
-            scanLine.style.animationDuration = `${randomDur}s`;
-        }, 4000);
-    </script>
+const cameraFeed = document.getElementById("cameraFeed");
+const captureCanvas = document.getElementById("captureCanvas");
+const faceFrame = document.getElementById("faceFrame");
+const cameraStatus = document.getElementById("cameraStatus");
+const cameraDot = document.getElementById("cameraDot");
+const detectionTitle = document.getElementById("detectionTitle");
+const detectionText = document.getElementById("detectionText");
+const subjectId = document.getElementById("subjectId");
+const captureStatus = document.getElementById("captureStatus");
+const captureStatusTitle = document.getElementById("captureStatusTitle");
+const captureStatusText = document.getElementById("captureStatusText");
+
+let cameraStream = null;
+let faceDetector = null;
+let faceDetectedFrames = 0;
+let captureStarted = false;
+let lastDetectionTime = 0;
+
+// MediaPipe is loaded dynamically so the HTML remains a single file.
+const MEDIAPIPE_SCRIPT =
+  "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.22/vision_bundle.mjs";
+
+function setStatus(title, text, active = true) {
+    cameraStatus.textContent = title;
+    detectionTitle.textContent = title;
+    detectionText.textContent = text;
+
+    if (active) {
+        cameraDot.classList.add("animate-pulse");
+        cameraDot.classList.remove("bg-error");
+        cameraDot.classList.add("bg-secondary");
+    } else {
+        cameraDot.classList.remove("animate-pulse");
+    }
+}
+
+function makeSubjectId() {
+    return "AF-" + Math.floor(1000 + Math.random() * 9000);
+}
+
+function loadVisionScript() {
+    return new Promise((resolve, reject) => {
+        if (window.__mediapipeLoaded) {
+            resolve();
+            return;
+        }
+
+        const script = document.createElement("script");
+        script.type = "module";
+        script.src = MEDIAPIPE_SCRIPT;
+        script.onload = () => {
+            window.__mediapipeLoaded = true;
+            resolve();
+        };
+        script.onerror = () => reject(new Error("Face detection library could not be loaded."));
+        document.head.appendChild(script);
+    });
+}
+
+async function startCamera() {
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        throw new Error("Camera access is not supported by this browser.");
+    }
+
+    // Prefer the front-facing camera on phones.
+    cameraStream = await navigator.mediaDevices.getUserMedia({
+        video: {
+            facingMode: { ideal: "user" },
+            width: { ideal: 1280 },
+            height: { ideal: 720 }
+        },
+        audio: false
+    });
+
+    cameraFeed.srcObject = cameraStream;
+    await cameraFeed.play();
+
+    subjectId.textContent = "SUBJECT_ID: " + makeSubjectId();
+    setStatus("CAMERA READY", "Keep exactly one face inside the scanning frame.");
+}
+
+async function createFaceDetector() {
+    await loadVisionScript();
+
+    // MediaPipe's global module API is available after the module loads.
+    const vision = await import(MEDIAPIPE_SCRIPT);
+
+    const filesetResolver = await vision.FilesetResolver.forVisionTasks(
+        "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.22/wasm"
+    );
+
+    faceDetector = await vision.FaceDetector.createFromOptions(filesetResolver, {
+        baseOptions: {
+            modelAssetPath:
+                "https://storage.googleapis.com/mediapipe-models/face_detector/blaze_face_short_range/float16/1/blaze_face_short_range.tflite",
+            delegate: "GPU"
+        },
+        runningMode: "VIDEO",
+        minDetectionConfidence: 0.65
+    });
+}
+
+function getLargestFace(detections) {
+    if (!detections || detections.length === 0) return null;
+
+    let largest = null;
+    let largestArea = 0;
+
+    for (const detection of detections) {
+        const box = detection.boundingBox;
+        if (!box) continue;
+
+        const area = Math.max(0, box.width) * Math.max(0, box.height);
+        if (area > largestArea) {
+            largestArea = area;
+            largest = detection;
+        }
+    }
+
+    return largest;
+}
+
+function faceIsInsideFrame(detection) {
+    if (!detection || !detection.boundingBox) return false;
+
+    const box = detection.boundingBox;
+
+    // Camera/video coordinates.
+    const centerX = box.originX + box.width / 2;
+    const centerY = box.originY + box.height / 2;
+
+    const videoW = cameraFeed.videoWidth;
+    const videoH = cameraFeed.videoHeight;
+
+    if (!videoW || !videoH) return false;
+
+    const normalizedX = centerX / videoW;
+    const normalizedY = centerY / videoH;
+
+    // Require the face to be reasonably centered and large enough.
+    const centerOK =
+        normalizedX > 0.25 &&
+        normalizedX < 0.75 &&
+        normalizedY > 0.18 &&
+        normalizedY < 0.82;
+
+    const sizeOK =
+        box.width / videoW > 0.16 &&
+        box.height / videoH > 0.16;
+
+    return centerOK && sizeOK;
+}
+
+function drawCapturedFrame() {
+    const canvas = captureCanvas;
+    const ctx = canvas.getContext("2d");
+
+    canvas.width = cameraFeed.videoWidth;
+    canvas.height = cameraFeed.videoHeight;
+
+    // The displayed camera is mirrored, so save the image naturally oriented.
+    ctx.save();
+    ctx.translate(canvas.width, 0);
+    ctx.scale(-1, 1);
+    ctx.drawImage(cameraFeed, 0, 0, canvas.width, canvas.height);
+    ctx.restore();
+
+    return canvas.toDataURL("image/jpeg", 0.92);
+}
+
+function dataURLToBlob(dataURL) {
+    const parts = dataURL.split(",");
+    const mime = parts[0].match(/:(.*?);/)[1];
+    const binary = atob(parts[1]);
+    const bytes = new Uint8Array(binary.length);
+
+    for (let i = 0; i < binary.length; i++) {
+        bytes[i] = binary.charCodeAt(i);
+    }
+
+    return new Blob([bytes], { type: mime });
+}
+
+function saveCaptureToIndexedDB(blob, dataURL) {
+    return new Promise((resolve, reject) => {
+        const request = indexedDB.open("DeepScanMediaDB", 2);
+
+        request.onupgradeneeded = (event) => {
+            const db = event.target.result;
+
+            if (!db.objectStoreNames.contains("media")) {
+                db.createObjectStore("media", { keyPath: "id" });
+            }
+        };
+
+        request.onsuccess = (event) => {
+            const db = event.target.result;
+            const transaction = db.transaction("media", "readwrite");
+            const store = transaction.objectStore("media");
+
+            store.put({
+                id: "current",
+                file: blob,
+                fileName: "live_face_capture.jpg",
+                fileType: "image/jpeg",
+                fileSize: blob.size,
+                mediaType: "live-face",
+                module: "LIVE-FACE",
+                dataURL: dataURL,
+                savedAt: new Date().toISOString()
+            });
+
+            transaction.oncomplete = () => {
+                db.close();
+                resolve();
+            };
+
+            transaction.onerror = () => reject(transaction.error);
+        };
+
+        request.onerror = () => reject(request.error);
+    });
+}
+
+async function captureAndRedirect() {
+    if (captureStarted) return;
+    captureStarted = true;
+
+    faceFrame.classList.remove("face-detected");
+    faceFrame.classList.add("face-capturing");
+
+    captureStatus.classList.remove("hidden");
+    captureStatusTitle.textContent = "Face detected";
+    captureStatusText.textContent = "Capturing secure frame...";
+
+    setStatus("CAPTURING FACE", "Face locked. Saving the captured frame...");
+
+    const dataURL = drawCapturedFrame();
+    const blob = dataURLToBlob(dataURL);
+
+    try {
+        await saveCaptureToIndexedDB(blob, dataURL);
+
+        captureStatusTitle.textContent = "Capture saved";
+        captureStatusText.textContent = "Opening XAI forensic analysis...";
+
+        setStatus("CAPTURE COMPLETE", "Face frame saved successfully. Redirecting to XAI...");
+
+        // Stop camera before leaving the page.
+        if (cameraStream) {
+            cameraStream.getTracks().forEach(track => track.stop());
+        }
+
+        // Small delay lets the user see the successful capture state.
+        setTimeout(() => {
+            window.location.href = "xai.html";
+        }, 500);
+
+    } catch (error) {
+        console.error(error);
+        captureStarted = false;
+        faceFrame.classList.remove("face-capturing");
+        captureStatusTitle.textContent = "Save failed";
+        captureStatusText.textContent = "Could not save the captured face. Please try again.";
+        setStatus("SAVE ERROR", "Capture could not be stored locally.", false);
+    }
+}
+
+async function detectionLoop() {
+    if (!faceDetector || captureStarted) return;
+
+    const now = performance.now();
+
+    // MediaPipe VIDEO detection should receive a monotonically increasing timestamp.
+    if (now - lastDetectionTime < 120) {
+        requestAnimationFrame(detectionLoop);
+        return;
+    }
+
+    lastDetectionTime = now;
+
+    try {
+        const result = faceDetector.detectForVideo(cameraFeed, now);
+        const face = getLargestFace(result.detections);
+
+        if (face && faceIsInsideFrame(face)) {
+            faceDetectedFrames++;
+            faceFrame.classList.add("face-detected");
+
+            setStatus(
+                "FACE DETECTED",
+                "Face is centered. Hold still for automatic capture."
+            );
+
+            // Require several consecutive detections to reduce false triggers.
+            if (faceDetectedFrames >= 8) {
+                await captureAndRedirect();
+                return;
+            }
+        } else if (face) {
+            faceDetectedFrames = 0;
+            faceFrame.classList.remove("face-detected");
+
+            setStatus(
+                "FACE FOUND",
+                "Move your face into the center of the scanning frame."
+            );
+        } else {
+            faceDetectedFrames = 0;
+            faceFrame.classList.remove("face-detected");
+
+            setStatus(
+                "SEARCHING FACE",
+                "No face detected. Keep one face clearly visible."
+            );
+        }
+
+    } catch (error) {
+        console.error("Face detection error:", error);
+    }
+
+    requestAnimationFrame(detectionLoop);
+}
+
+async function initializeLiveFaceScan() {
+    try {
+        setStatus("STARTING CAMERA", "Requesting camera permission...");
+
+        await startCamera();
+
+        setStatus("LOADING DETECTOR", "Loading local face-detection model...");
+
+        await createFaceDetector();
+
+        setStatus("SEARCHING FACE", "Keep one face inside the scanning frame.");
+
+        requestAnimationFrame(detectionLoop);
+
+    } catch (error) {
+        console.error(error);
+
+        setStatus(
+            "CAMERA ERROR",
+            error.message || "Camera could not be started.",
+            false
+        );
+
+        detectionTitle.textContent = "Camera access required";
+        detectionText.textContent =
+            "Allow camera permission and open this page from HTTPS or localhost.";
+    }
+}
+
+window.addEventListener("beforeunload", () => {
+    if (cameraStream) {
+        cameraStream.getTracks().forEach(track => track.stop());
+    }
+});
+
+initializeLiveFaceScan();
+</script>
 
 
 
